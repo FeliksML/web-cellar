@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import { OutlinePillButton } from "@/components/ui/outline-pill-button";
-import { ThemeSwitch } from "./theme-switch";
 import { navLinks } from "../data/landing.data";
 
 export function LandingNavbar() {
@@ -34,12 +33,13 @@ export function LandingNavbar() {
             </Link>
           </div>
 
-          {/* Right: Theme switch + CTA */}
-          <div className="flex items-center gap-3">
-            <ThemeSwitch />
+          {/* Right: CTA */}
+          <div className="flex items-center">
             <OutlinePillButton size="sm" className="hidden sm:inline-flex">
               SHOP NOW
             </OutlinePillButton>
+            {/* Mobile: Spacer for centering logo */}
+            <div className="sm:hidden w-10" />
           </div>
         </div>
       </div>
