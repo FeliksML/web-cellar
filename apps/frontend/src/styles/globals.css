@@ -1,14 +1,116 @@
 @import "tailwindcss";
 
+/* Beasty Baker Brand Color Theme */
+@theme {
+  /* Primary: Gold/Amber */
+  --color-primary-50: #FFF7E6;
+  --color-primary-100: #FFE8BF;
+  --color-primary-200: #FAD89B;
+  --color-primary-300: #F5C784;
+  --color-primary-400: #ECB45E;
+  --color-primary-500: #D99E3B;
+  --color-primary-600: #B77E22;
+  --color-primary-700: #8E5F15;
+  --color-primary-800: #5F3D0F;
+  --color-primary-900: #3B250B;
+  --color-primary-950: #251807;
+
+  /* Secondary: Herbal/Emerald */
+  --color-secondary-50: #ECFFF6;
+  --color-secondary-100: #D2FBE7;
+  --color-secondary-200: #A9F3CF;
+  --color-secondary-300: #78E2B0;
+  --color-secondary-400: #39C78B;
+  --color-secondary-500: #1FA66F;
+  --color-secondary-600: #168457;
+  --color-secondary-700: #136947;
+  --color-secondary-800: #0F4A33;
+  --color-secondary-900: #0A2F22;
+  --color-secondary-950: #061E16;
+
+  /* Neutral: Warm browns */
+  --color-neutral-50: #FAF7F2;
+  --color-neutral-100: #F2ECE2;
+  --color-neutral-200: #D8CFC1;
+  --color-neutral-300: #B7AA9B;
+  --color-neutral-400: #8A7A6C;
+  --color-neutral-500: #5B4A3E;
+  --color-neutral-600: #3B2B24;
+  --color-neutral-700: #251A17;
+  --color-neutral-800: #150E0E;
+  --color-neutral-900: #0B0A0C;
+  --color-neutral-950: #050406;
+
+  /* Accent: Glow colors */
+  --color-glow-purple: #9B6BFF;
+  --color-glow-green-gold: #E1CE71;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-  color-scheme: light dark;
+}
+
+/* Light mode defaults */
+.light {
+  color-scheme: light;
+}
+
+/* Dark mode */
+.dark {
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+}
+
+/* Grain texture utility - subtle noise for premium feel */
+.bg-grain {
+  position: relative;
+}
+
+.bg-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+}
+
+/* Radial gradient utility for vignette effects */
+.bg-gradient-radial {
+  background: radial-gradient(ellipse at center, var(--tw-gradient-stops));
+}
+
+/* Vignette overlay utility */
+.vignette {
+  position: relative;
+}
+
+.vignette::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+}
+
+.dark .vignette::before {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
 }
