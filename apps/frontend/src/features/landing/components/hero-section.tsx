@@ -1,5 +1,6 @@
 import { OutlinePillButton } from "@/components/ui/outline-pill-button";
 import { heroContent } from "../data/landing.data";
+import { FloatingHeroImage } from "./floating-hero-image";
 
 export function HeroSection() {
   return (
@@ -57,26 +58,20 @@ export function HeroSection() {
               </div>
             </div>
 
-            {/* Right product - Pistachio Matcha */}
-            <div className="relative">
-              <div
-                className="w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-2xl drop-shadow-xl overflow-hidden"
-                style={{
-                  background: "linear-gradient(135deg, #39C78B, #E1CE71)",
-                }}
-              >
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-center p-6">
-                    <div className="w-32 h-40 mx-auto rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
-                      <span className="text-white/60 text-xs font-medium uppercase tracking-wider">
-                        Pistachio
-                        <br />
-                        Matcha
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            {/* Right product - Pistachio Matcha (cupcake image) */}
+            <div className="relative flex items-center justify-center">
+              <FloatingHeroImage
+                src="/cupcake_8k_transparent_glow.png"
+                alt="Pistachio Matcha cupcake with glow effect"
+                className="
+                  w-[80vw] max-w-[320px]
+                  sm:w-[60vw] sm:max-w-[360px]
+                  md:w-[40vw] md:max-w-[400px]
+                  lg:w-[45vw] lg:max-w-[480px]
+                  xl:max-w-[520px]
+                  mx-auto md:mx-0
+                "
+              />
             </div>
           </div>
         </div>
