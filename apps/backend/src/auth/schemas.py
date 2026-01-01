@@ -27,6 +27,10 @@ class UserResponse(UserBase):
 
     id: int
     is_active: bool
+    role: str = "customer"
+    first_name: str | None = None
+    last_name: str | None = None
+    phone: str | None = None
     created_at: datetime
 
     class Config:

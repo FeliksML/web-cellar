@@ -11,6 +11,7 @@ from src.database import Base
 
 # Import all models here so Alembic can detect them
 from src.auth.models import User  # noqa: F401
+from src.products.models import Category, Product, ProductImage  # noqa: F401
 
 config = context.config
 
