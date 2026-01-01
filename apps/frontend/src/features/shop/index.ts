@@ -11,6 +11,9 @@ export { ProductDetailModal } from "./components/product-detail-modal";
 export { DietaryBadges, DietaryBadgesFull } from "./components/dietary-badges";
 export { PriceDisplay, SavingsBadge } from "./components/price-display";
 export { QuantitySelector } from "./components/quantity-selector";
+export { ProductSkeleton, ProductSkeletonGrid } from "./components/product-skeleton";
+export { SearchInput } from "./components/search-input";
+export { DietaryFilterPills } from "./components/dietary-filter-pills";
 
 // Cart components
 export { CartButton } from "./components/cart-button";

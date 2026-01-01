@@ -135,8 +135,23 @@ body {
           drop-shadow(0 16px 48px rgba(57, 199, 139, 0.1));
 }
 
+/* Shimmer animation for loading skeletons */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-float-gentle {
+  .animate-float-gentle,
+  .animate-shimmer {
     animation: none;
   }
 }

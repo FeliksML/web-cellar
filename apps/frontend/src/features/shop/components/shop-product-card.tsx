@@ -2,6 +2,7 @@
  * Product card component for the shop
  */
 
+import { useState } from "react";
 import type { ProductListItem } from "../types";
 import { DietaryBadges } from "./dietary-badges";
 import { PriceDisplay } from "./price-display";
@@ -17,13 +18,23 @@ export function ShopProductCard({
   onQuickView,
   onAddToCart,
 }: ShopProductCardProps) {
+  const [isAdding, setIsAdding] = useState(false);
+
   const handleClick = () => {
     onQuickView?.(product);
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (isAdding) return;
+
+    setIsAdding(true);
     onAddToCart?.(product);
+
+    // Reset after animation
+    setTimeout(() => {
+      setIsAdding(false);
+    }, 1500);
   };
 
   // Dynamic glow color based on product gradient
@@ -96,9 +107,27 @@ export function ShopProductCard({
         {product.is_in_stock && onAddToCart && (
           <button
             onClick={handleAddToCart}
-            className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-primary-500 hover:bg-primary-600 text-neutral-950 font-semibold text-sm px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-lg"
+            disabled={isAdding}
+            className={`
+              absolute bottom-3 left-1/2 -translate-x-1/2 font-semibold text-sm px-4 py-2 rounded-full
+              opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg
+              transform ${isAdding ? "scale-110" : "hover:scale-105"}
+              ${isAdding
+                ? "bg-secondary-500 text-white"
+                : "bg-primary-500 hover:bg-primary-600 text-neutral-950"
+              }
+            `}
           >
-            Add to Cart
+            {isAdding ? (
+              <span className="flex items-center gap-1.5">
+                <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                </svg>
+                Added!
+              </span>
+            ) : (
+              "Add to Cart"
+            )}
           </button>
         )}
       </div>

@@ -5,10 +5,32 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api-client";
 import type { PaginatedProducts, ProductFilters } from "../types";
+import { getMockProducts } from "../data/mock-products";
+
+// Set to true to always use mock data (for development without backend)
+const USE_MOCK_DATA = true;
 
 async function fetchProducts(
   filters: ProductFilters = {}
 ): Promise<PaginatedProducts> {
+  // Use mock data if enabled or as fallback
+  if (USE_MOCK_DATA) {
+    // Simulate network delay for realistic UX
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    return getMockProducts({
+      category: filters.category,
+      search: filters.search,
+      is_gluten_free: filters.is_gluten_free,
+      is_dairy_free: filters.is_dairy_free,
+      is_vegan: filters.is_vegan,
+      is_keto_friendly: filters.is_keto_friendly,
+      sort_by: filters.sort_by,
+      sort_order: filters.sort_order,
+      page: filters.page,
+      page_size: filters.page_size,
+    });
+  }
+
   const params = new URLSearchParams();
 
   if (filters.category) params.append("category", filters.category);

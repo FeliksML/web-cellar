@@ -11,12 +11,16 @@ import {
   CategoryPills,
   CartButton,
   CartDrawer,
+  SearchInput,
+  DietaryFilterPills,
   useProducts,
   useFilterParams,
   useFilterStore,
   useCartStore,
   type ProductListItem,
 } from "@/features/shop";
+import { ToastContainer } from "@/components/ui/toast";
+import { toastSuccess } from "@/stores/toast-store";
 
 export function ShopPage() {
   const [selectedProduct, setSelectedProduct] = useState<ProductListItem | null>(null);
@@ -33,6 +37,7 @@ export function ShopPage() {
 
   const handleAddToCart = (product: ProductListItem) => {
     addToCart(product, 1);
+    toastSuccess(`${product.name} added to cart!`);
   };
 
   const handleModalAddToCart = (productId: number, quantity: number) => {
@@ -40,6 +45,7 @@ export function ShopPage() {
     const product = data?.items.find((p) => p.id === productId) || selectedProduct;
     if (product) {
       addToCart(product, quantity);
+      toastSuccess(`${quantity}x ${product.name} added to cart!`);
     }
   };
 
@@ -94,8 +100,14 @@ export function ShopPage() {
           </div>
 
           {/* Category pills */}
-          <div className="mb-8">
+          <div className="mb-6">
             <CategoryPills />
+          </div>
+
+          {/* Search and dietary filters */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
+            <SearchInput />
+            <DietaryFilterPills />
           </div>
 
           {/* Toolbar */}
@@ -223,6 +235,9 @@ export function ShopPage() {
 
       {/* Cart drawer */}
       <CartDrawer />
+
+      {/* Toast notifications */}
+      <ToastContainer />
     </div>
   );
 }
