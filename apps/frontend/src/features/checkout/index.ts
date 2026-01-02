@@ -8,10 +8,16 @@ export { OrderSummary } from "./components/order-summary";
 export { CheckoutSuccess } from "./components/checkout-success";
 export { CartReview } from "./components/cart-review";
 
+// New delivery components
+export { AddressSelector } from "./components/address-selector";
+export { DeliveryDatePicker } from "./components/delivery-date-picker";
+export { TimeSlotPicker, TimeSlotSelector } from "./components/time-slot-picker";
+export { DeliveryStep } from "./components/delivery-step";
+
 // Store
 export {
   useCheckoutStore,
-  generateOrderNumber,
+  getDefaultDeliveryPreferences,
 } from "./stores/checkout-store";
 
 // Types

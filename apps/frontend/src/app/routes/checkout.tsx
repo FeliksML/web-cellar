@@ -1,8 +1,9 @@
 /**
  * Checkout page - Multi-step checkout flow
+ * Steps: Cart Review → Shipping → Delivery → Confirmation
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { LandingNavbar } from "@/features/landing";
 import {
@@ -10,142 +11,181 @@ import {
   ShippingForm,
   OrderSummary,
   CheckoutSuccess,
+  DeliveryStep,
   useCheckoutStore,
-  generateOrderNumber,
   type ShippingAddress,
-  type Order,
   type CheckoutStep,
+  type DeliveryPreferences,
 } from "@/features/checkout";
-import { useCartStore, useCartSummary } from "@/features/shop";
+import { useUnifiedCart } from "@/features/shop";
+import { useAuthStore } from "@/features/auth";
+import { useCreateOrder, type Order } from "@/features/orders";
+import { useAddress } from "@/features/addresses";
 
 export function CheckoutPage() {
   const navigate = useNavigate();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const { cart, clearCart } = useUnifiedCart();
+
+  // Checkout store state
+  const {
+    shippingAddress,
+    selectedAddressId,
+    deliveryPreferences,
+    setShippingAddress,
+    setSelectedAddressId,
+    setDeliveryPreferences,
+    resetCheckout,
+  } = useCheckoutStore();
+
+  // Local UI state
   const [step, setStep] = useState<CheckoutStep>("cart");
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
+  const [orderError, setOrderError] = useState<string | null>(null);
 
-  const { items, clearCart } = useCartStore();
-  const { subtotal, isEmpty } = useCartSummary();
-  const { shippingAddress, setShippingAddress, addOrder } = useCheckoutStore();
+  // Fetch selected address details if authenticated
+  const { data: _selectedAddress } = useAddress(selectedAddressId ?? 0);
 
-  // Calculate totals
-  const shippingCost = subtotal >= 50 ? 0 : 5.99;
-  const total = subtotal + shippingCost;
+  // Create order mutation
+  const createOrderMutation = useCreateOrder();
+
+  // Calculate max lead time from cart items
+  const maxLeadTimeHours = useMemo(() => {
+    if (!cart.items.length) return 0;
+    return Math.max(
+      ...cart.items.map((item) => item.product.lead_time_hours ?? 0)
+    );
+  }, [cart.items]);
 
   // Redirect if cart is empty and not on confirmation
   useEffect(() => {
-    if (isEmpty && step !== "confirmation") {
+    if (cart.isEmpty && step !== "confirmation") {
       navigate("/shop");
     }
-  }, [isEmpty, step, navigate]);
+  }, [cart.isEmpty, step, navigate]);
 
+  // Handle shipping form submission (for guest checkout or new address)
   const handleShippingSubmit = (data: ShippingAddress) => {
     setShippingAddress(data);
-    // In a real app, we'd process payment here
-    // For now, create the order immediately
-    const order: Order = {
-      id: crypto.randomUUID(),
-      orderNumber: generateOrderNumber(),
-      items: items.map((item) => ({
-        productId: item.product.id,
-        name: item.product.name,
-        price: item.product.price,
-        quantity: item.quantity,
-        gradient_from: item.product.gradient_from,
-        gradient_to: item.product.gradient_to,
-      })),
-      shipping: data,
-      subtotal,
-      shipping_cost: shippingCost,
-      total,
-      status: "confirmed",
-      createdAt: new Date().toISOString(),
-    };
-
-    addOrder(order);
-    setCompletedOrder(order);
-    clearCart();
-    setStep("confirmation");
+    setStep("delivery");
   };
 
-  const stepIndicator = (
-    <div className="flex items-center justify-center gap-4 mb-8">
-      {/* Cart step */}
-      <button
-        onClick={() => step !== "confirmation" && setStep("cart")}
-        className={`flex items-center gap-2 ${
-          step === "cart" ? "text-primary-200" : "text-neutral-500"
-        } ${step === "confirmation" ? "cursor-default" : "cursor-pointer"}`}
-        disabled={step === "confirmation"}
-      >
-        <span
-          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-            step === "cart"
-              ? "bg-primary-500 text-neutral-950"
-              : step === "confirmation" || step === "shipping"
-              ? "bg-secondary-500 text-neutral-950"
-              : "bg-neutral-700 text-neutral-400"
-          }`}
-        >
-          {step === "shipping" || step === "confirmation" ? (
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          ) : (
-            "1"
-          )}
-        </span>
-        <span className="hidden sm:inline font-medium">Cart</span>
-      </button>
+  // Handle address selection (for authenticated users)
+  const handleAddressSelect = (addressId: number) => {
+    setSelectedAddressId(addressId);
+    setStep("delivery");
+  };
 
-      <div className="w-12 h-px bg-neutral-700" />
+  // Handle delivery step submission - creates the order
+  const handleDeliverySubmit = async (preferences: DeliveryPreferences) => {
+    setDeliveryPreferences(preferences);
+    setOrderError(null);
+
+    try {
+      // Build the order payload
+      const orderData = {
+        // Address - either saved address ID or guest address snapshot
+        shipping_address_id: isAuthenticated ? selectedAddressId ?? undefined : undefined,
+        shipping_address: !isAuthenticated && shippingAddress ? {
+          first_name: shippingAddress.firstName,
+          last_name: shippingAddress.lastName,
+          phone: shippingAddress.phone || null,
+          address_line1: shippingAddress.address,
+          address_line2: shippingAddress.apartment || null,
+          city: shippingAddress.city,
+          state: shippingAddress.state,
+          postal_code: shippingAddress.zipCode,
+          country: "US",
+          delivery_instructions: null,
+        } : undefined,
+
+        // Fulfillment
+        fulfillment_type: preferences.fulfillmentType,
+        requested_date: preferences.requestedDate,
+        requested_time_slot: preferences.timeSlot ?? undefined,
+
+        // Contact
+        contact_email: shippingAddress?.email || "",
+        contact_phone: shippingAddress?.phone ?? undefined,
+
+        // Payment (placeholder - will integrate Stripe later)
+        payment_method: "stripe",
+      };
+
+      const order = await createOrderMutation.mutateAsync(orderData);
+
+      // Success - clear cart and show confirmation
+      clearCart();
+      setCompletedOrder(order);
+      setStep("confirmation");
+      resetCheckout();
+    } catch (error) {
+      console.error("Order creation failed:", error);
+      setOrderError(
+        error instanceof Error
+          ? error.message
+          : "Failed to create order. Please try again."
+      );
+    }
+  };
+
+  // Step indicator component
+  const stepIndicator = (
+    <div className="flex items-center justify-center gap-2 sm:gap-4 mb-8">
+      {/* Cart step */}
+      <StepButton
+        number={1}
+        label="Cart"
+        status={step === "cart" ? "current" : "completed"}
+        onClick={() => step !== "confirmation" && setStep("cart")}
+        disabled={step === "confirmation"}
+      />
+
+      <StepDivider />
 
       {/* Shipping step */}
-      <button
-        onClick={() => step === "shipping" && setStep("shipping")}
-        className={`flex items-center gap-2 ${
-          step === "shipping" ? "text-primary-200" : "text-neutral-500"
-        } ${step !== "shipping" ? "cursor-default" : "cursor-pointer"}`}
-        disabled={step !== "shipping"}
-      >
-        <span
-          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-            step === "shipping"
-              ? "bg-primary-500 text-neutral-950"
-              : step === "confirmation"
-              ? "bg-secondary-500 text-neutral-950"
-              : "bg-neutral-700 text-neutral-400"
-          }`}
-        >
-          {step === "confirmation" ? (
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          ) : (
-            "2"
-          )}
-        </span>
-        <span className="hidden sm:inline font-medium">Shipping</span>
-      </button>
+      <StepButton
+        number={2}
+        label="Shipping"
+        status={
+          step === "shipping"
+            ? "current"
+            : step === "delivery" || step === "confirmation"
+            ? "completed"
+            : "pending"
+        }
+        onClick={() =>
+          (step === "shipping" || step === "delivery") && setStep("shipping")
+        }
+        disabled={step === "cart" || step === "confirmation"}
+      />
 
-      <div className="w-12 h-px bg-neutral-700" />
+      <StepDivider />
+
+      {/* Delivery step */}
+      <StepButton
+        number={3}
+        label="Delivery"
+        status={
+          step === "delivery"
+            ? "current"
+            : step === "confirmation"
+            ? "completed"
+            : "pending"
+        }
+        onClick={() => step === "delivery" && setStep("delivery")}
+        disabled={step !== "delivery"}
+      />
+
+      <StepDivider />
 
       {/* Confirmation step */}
-      <div
-        className={`flex items-center gap-2 ${
-          step === "confirmation" ? "text-primary-200" : "text-neutral-500"
-        }`}
-      >
-        <span
-          className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-            step === "confirmation"
-              ? "bg-primary-500 text-neutral-950"
-              : "bg-neutral-700 text-neutral-400"
-          }`}
-        >
-          3
-        </span>
-        <span className="hidden sm:inline font-medium">Confirm</span>
-      </div>
+      <StepButton
+        number={4}
+        label="Confirm"
+        status={step === "confirmation" ? "current" : "pending"}
+        disabled
+      />
     </div>
   );
 
@@ -172,8 +212,18 @@ export function CheckoutPage() {
               to="/shop"
               className="inline-flex items-center gap-2 text-sm text-neutral-400 hover:text-neutral-200 transition-colors mb-4"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
               </svg>
               Back to Shop
             </Link>
@@ -184,6 +234,13 @@ export function CheckoutPage() {
 
           {/* Step indicator */}
           {stepIndicator}
+
+          {/* Error message */}
+          {orderError && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm">
+              {orderError}
+            </div>
+          )}
 
           {/* Content based on step */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -197,13 +254,26 @@ export function CheckoutPage() {
                 {step === "shipping" && (
                   <ShippingForm
                     initialData={shippingAddress}
+                    selectedAddressId={selectedAddressId}
+                    isAuthenticated={isAuthenticated}
                     onSubmit={handleShippingSubmit}
+                    onSelectAddress={handleAddressSelect}
                     onBack={() => setStep("cart")}
                   />
                 )}
 
+                {step === "delivery" && (
+                  <DeliveryStep
+                    initialPreferences={deliveryPreferences}
+                    minLeadTimeHours={maxLeadTimeHours}
+                    onSubmit={handleDeliverySubmit}
+                    onBack={() => setStep("shipping")}
+                    isSubmitting={createOrderMutation.isPending}
+                  />
+                )}
+
                 {step === "confirmation" && completedOrder && (
-                  <CheckoutSuccess order={completedOrder} />
+                  <CheckoutSuccess order={completedOrder as any} />
                 )}
               </div>
             </div>
@@ -212,7 +282,7 @@ export function CheckoutPage() {
             {step !== "confirmation" && (
               <div className="lg:col-span-1">
                 <OrderSummary
-                  showEditButton={step === "shipping"}
+                  showEditButton={step !== "cart"}
                   onEdit={() => setStep("cart")}
                 />
               </div>
@@ -222,4 +292,66 @@ export function CheckoutPage() {
       </main>
     </div>
   );
+}
+
+// Step button component
+interface StepButtonProps {
+  number: number;
+  label: string;
+  status: "pending" | "current" | "completed";
+  onClick?: () => void;
+  disabled?: boolean;
+}
+
+function StepButton({
+  number,
+  label,
+  status,
+  onClick,
+  disabled,
+}: StepButtonProps) {
+  const isClickable = !disabled && onClick;
+
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`flex items-center gap-2 ${
+        status === "current" ? "text-primary-200" : "text-neutral-500"
+      } ${isClickable ? "cursor-pointer" : "cursor-default"}`}
+    >
+      <span
+        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition ${
+          status === "current"
+            ? "bg-primary-500 text-neutral-950"
+            : status === "completed"
+            ? "bg-secondary-500 text-neutral-950"
+            : "bg-neutral-700 text-neutral-400"
+        }`}
+      >
+        {status === "completed" ? (
+          <svg
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+        ) : (
+          number
+        )}
+      </span>
+      <span className="hidden sm:inline font-medium">{label}</span>
+    </button>
+  );
+}
+
+function StepDivider() {
+  return <div className="w-8 sm:w-12 h-px bg-neutral-700" />;
 }

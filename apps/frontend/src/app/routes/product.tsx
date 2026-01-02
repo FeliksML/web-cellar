@@ -22,24 +22,45 @@ export function ProductPage() {
 
   const { data: product, isLoading, error } = useProduct(slug || "");
   const { addItem } = useCartStore();
-  const { showToast } = useToastStore();
+  const { addToast } = useToastStore();
 
   const handleAddToCart = () => {
     if (!product) return;
 
-    // Add product to cart with quantity
-    for (let i = 0; i < quantity; i++) {
-      addItem({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        gradient_from: product.gradient_from,
-        gradient_to: product.gradient_to,
-        primary_image_url: product.primary_image_url,
-      });
-    }
+    // Convert Product to ProductListItem for cart
+    const cartProduct = {
+      id: product.id,
+      name: product.name,
+      slug: product.slug,
+      price: product.price,
+      compare_at_price: product.compare_at_price,
+      short_description: product.short_description,
+      gradient_from: product.gradient_from,
+      gradient_to: product.gradient_to,
+      is_featured: product.is_featured,
+      is_bestseller: product.is_bestseller,
+      protein_grams: product.protein_grams,
+      is_gluten_free: product.is_gluten_free,
+      is_dairy_free: product.is_dairy_free,
+      is_vegan: product.is_vegan,
+      is_keto_friendly: product.is_keto_friendly,
+      is_active: product.is_active,
+      is_on_sale: product.is_on_sale,
+      is_in_stock: product.is_in_stock,
+      primary_image_url: product.primary_image_url,
+      category: product.category,
+      lead_time_hours: product.lead_time_hours,
+      minimum_quantity: product.minimum_quantity,
+      quantity_increment: product.quantity_increment,
+      allergens: product.allergens,
+      average_rating: product.average_rating,
+      review_count: product.review_count,
+    };
 
-    showToast(`Added ${quantity} ${product.name} to cart`, "success");
+    // Add to cart with quantity
+    addItem(cartProduct, quantity);
+
+    addToast({ message: `Added ${quantity} ${product.name} to cart`, type: "success" });
   };
 
   const isOnSale =

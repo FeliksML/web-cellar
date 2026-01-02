@@ -4,6 +4,16 @@
 
 import type { ProductListItem, Product, PaginatedProducts } from "../types";
 
+// Default bakery fields for mock products
+const defaultBakeryFields = {
+  lead_time_hours: 24,
+  minimum_quantity: 1,
+  quantity_increment: 1,
+  allergens: null as string[] | null,
+  average_rating: null as number | null,
+  review_count: 0,
+};
+
 export const MOCK_PRODUCTS: ProductListItem[] = [
   // Cupcakes
   {
@@ -27,6 +37,10 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: true,
     primary_image_url: null,
     category: { id: 1, name: "Protein Cupcakes", slug: "protein-cupcakes", description: null, image_url: null, display_order: 1, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    allergens: ["eggs", "milk"],
+    average_rating: 4.8,
+    review_count: 24,
   },
   {
     id: 2,
@@ -49,6 +63,10 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: true,
     primary_image_url: null,
     category: { id: 1, name: "Protein Cupcakes", slug: "protein-cupcakes", description: null, image_url: null, display_order: 1, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    allergens: ["eggs", "milk", "tree nuts"],
+    average_rating: 4.6,
+    review_count: 18,
   },
   {
     id: 3,
@@ -71,6 +89,10 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: true,
     primary_image_url: null,
     category: { id: 1, name: "Protein Cupcakes", slug: "protein-cupcakes", description: null, image_url: null, display_order: 1, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    allergens: ["eggs"],
+    average_rating: 4.9,
+    review_count: 42,
   },
   // Brownies
   {
@@ -94,6 +116,10 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: true,
     primary_image_url: null,
     category: { id: 2, name: "Protein Brownies", slug: "protein-brownies", description: null, image_url: null, display_order: 2, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    allergens: ["eggs", "milk"],
+    average_rating: 4.7,
+    review_count: 35,
   },
   {
     id: 5,
@@ -116,6 +142,10 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: true,
     primary_image_url: null,
     category: { id: 2, name: "Protein Brownies", slug: "protein-brownies", description: null, image_url: null, display_order: 2, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    allergens: ["peanuts"],
+    average_rating: 4.5,
+    review_count: 12,
   },
   // Cookies
   {
@@ -139,6 +169,10 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: true,
     primary_image_url: null,
     category: { id: 3, name: "Protein Cookies", slug: "protein-cookies", description: null, image_url: null, display_order: 3, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    allergens: ["eggs", "milk"],
+    average_rating: 4.8,
+    review_count: 56,
   },
   {
     id: 7,
@@ -161,6 +195,10 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: true,
     primary_image_url: null,
     category: { id: 3, name: "Protein Cookies", slug: "protein-cookies", description: null, image_url: null, display_order: 3, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    allergens: ["wheat"],
+    average_rating: 4.3,
+    review_count: 8,
   },
   {
     id: 8,
@@ -183,6 +221,10 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: true,
     primary_image_url: null,
     category: { id: 3, name: "Protein Cookies", slug: "protein-cookies", description: null, image_url: null, display_order: 3, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    allergens: ["eggs", "milk"],
+    average_rating: 4.6,
+    review_count: 15,
   },
   // Protein Bars
   {
@@ -206,6 +248,11 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: true,
     primary_image_url: null,
     category: { id: 4, name: "Protein Bars", slug: "protein-bars", description: null, image_url: null, display_order: 4, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    lead_time_hours: 0, // Ready to ship
+    allergens: ["milk", "soy"],
+    average_rating: 4.4,
+    review_count: 28,
   },
   {
     id: 10,
@@ -228,6 +275,11 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: true,
     primary_image_url: null,
     category: { id: 4, name: "Protein Bars", slug: "protein-bars", description: null, image_url: null, display_order: 4, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    lead_time_hours: 0, // Ready to ship
+    allergens: ["peanuts"],
+    average_rating: 4.2,
+    review_count: 9,
   },
   {
     id: 11,
@@ -250,6 +302,11 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: false, // Out of stock example
     primary_image_url: null,
     category: { id: 4, name: "Protein Bars", slug: "protein-bars", description: null, image_url: null, display_order: 4, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    lead_time_hours: 0,
+    allergens: ["milk", "soy"],
+    average_rating: null,
+    review_count: 0,
   },
   {
     id: 12,
@@ -272,6 +329,13 @@ export const MOCK_PRODUCTS: ProductListItem[] = [
     is_in_stock: true,
     primary_image_url: null,
     category: { id: 1, name: "Protein Cupcakes", slug: "protein-cupcakes", description: null, image_url: null, display_order: 1, is_active: true, created_at: "", updated_at: "" },
+    ...defaultBakeryFields,
+    lead_time_hours: 48, // Custom cupcake needs 2 days
+    minimum_quantity: 6,
+    quantity_increment: 6,
+    allergens: ["eggs", "milk", "wheat"],
+    average_rating: 4.9,
+    review_count: 31,
   },
 ];
 
@@ -380,5 +444,11 @@ export function getMockProductBySlug(slug: string): Product | null {
     updated_at: "2024-01-01T00:00:00Z",
     is_low_stock: false,
     images: [],
+    // Availability fields
+    is_seasonal: false,
+    available_from: null,
+    available_until: null,
+    available_days: null,
+    is_currently_available: listItem.is_in_stock && listItem.is_active,
   };
 }

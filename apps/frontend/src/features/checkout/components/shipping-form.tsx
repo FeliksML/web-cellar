@@ -1,17 +1,33 @@
 /**
  * Shipping address form component
+ * Supports both authenticated users (address selector) and guests (manual form)
  */
 
 import { useState } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { AddressSelector } from "./address-selector";
 import type { ShippingAddress } from "../types";
 
 interface ShippingFormProps {
   initialData?: ShippingAddress | null;
+  selectedAddressId?: number | null;
+  isAuthenticated?: boolean;
   onSubmit: (data: ShippingAddress) => void;
+  onSelectAddress?: (addressId: number) => void;
   onBack: () => void;
 }
 
-export function ShippingForm({ initialData, onSubmit, onBack }: ShippingFormProps) {
+export function ShippingForm({
+  initialData,
+  selectedAddressId,
+  isAuthenticated = false,
+  onSubmit,
+  onSelectAddress,
+  onBack,
+}: ShippingFormProps) {
+  const [showNewAddressForm, setShowNewAddressForm] = useState(
+    !isAuthenticated || !!initialData
+  );
   const [formData, setFormData] = useState<ShippingAddress>({
     firstName: initialData?.firstName || "",
     lastName: initialData?.lastName || "",
@@ -24,7 +40,9 @@ export function ShippingForm({ initialData, onSubmit, onBack }: ShippingFormProp
     zipCode: initialData?.zipCode || "",
   });
 
-  const [errors, setErrors] = useState<Partial<Record<keyof ShippingAddress, string>>>({});
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof ShippingAddress, string>>
+  >({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,7 +56,8 @@ export function ShippingForm({ initialData, onSubmit, onBack }: ShippingFormProp
   const validate = (): boolean => {
     const newErrors: Partial<Record<keyof ShippingAddress, string>> = {};
 
-    if (!formData.firstName.trim()) newErrors.firstName = "First name is required";
+    if (!formData.firstName.trim())
+      newErrors.firstName = "First name is required";
     if (!formData.lastName.trim()) newErrors.lastName = "Last name is required";
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
@@ -65,17 +84,84 @@ export function ShippingForm({ initialData, onSubmit, onBack }: ShippingFormProp
     }
   };
 
+  const handleAddressSelect = (addressId: number) => {
+    onSelectAddress?.(addressId);
+  };
+
+  const handleContinueWithSelected = () => {
+    if (selectedAddressId && onSelectAddress) {
+      // The checkout route will handle fetching the full address
+      // For now, we just move to the next step with the selected ID
+      onSelectAddress(selectedAddressId);
+    }
+  };
+
   const inputClass = (field: keyof ShippingAddress) => `
     w-full px-4 py-3 bg-neutral-800/60 border rounded-xl text-neutral-100 placeholder-neutral-500
     focus:outline-none focus:ring-2 focus:ring-primary-400/50 focus:border-primary-400 transition-all
     ${errors[field] ? "border-red-500" : "border-neutral-700/50"}
   `;
 
+  // For authenticated users, show address selector unless they want to add new
+  if (isAuthenticated && !showNewAddressForm) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h2 className="font-display text-2xl font-semibold text-primary-200 mb-2">
+            Shipping Address
+          </h2>
+          <p className="text-foreground/60 text-sm">
+            Select a saved address or add a new one
+          </p>
+        </div>
+
+        <AddressSelector
+          selectedId={selectedAddressId ?? null}
+          onSelect={handleAddressSelect}
+          onAddNew={() => setShowNewAddressForm(true)}
+        />
+
+        <div className="flex items-center gap-4 pt-4">
+          <button
+            type="button"
+            onClick={onBack}
+            className="flex items-center gap-2 px-6 py-3 text-neutral-300 hover:text-neutral-100 font-medium transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Cart
+          </button>
+
+          <button
+            type="button"
+            onClick={handleContinueWithSelected}
+            disabled={!selectedAddressId}
+            className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-primary-500 hover:bg-primary-400 text-neutral-950 font-semibold uppercase tracking-wider rounded-full shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Continue to Delivery
+            <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Show the form (for guests or when adding new address)
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <h2 className="font-display text-2xl font-semibold text-primary-200 mb-6">
-        Shipping Information
-      </h2>
+      <div>
+        <h2 className="font-display text-2xl font-semibold text-primary-200 mb-2">
+          {isAuthenticated ? "New Shipping Address" : "Shipping Information"}
+        </h2>
+        {isAuthenticated && (
+          <button
+            type="button"
+            onClick={() => setShowNewAddressForm(false)}
+            className="text-sm text-primary-400 hover:text-primary-300 transition"
+          >
+            ← Back to saved addresses
+          </button>
+        )}
+      </div>
 
       {/* Name row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -241,16 +327,18 @@ export function ShippingForm({ initialData, onSubmit, onBack }: ShippingFormProp
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-3 text-neutral-300 hover:text-neutral-100 font-medium transition-colors"
+          className="flex items-center gap-2 px-6 py-3 text-neutral-300 hover:text-neutral-100 font-medium transition-colors"
         >
+          <ArrowLeft className="w-4 h-4" />
           Back to Cart
         </button>
 
         <button
           type="submit"
-          className="flex-1 py-3.5 bg-primary-500 hover:bg-primary-400 text-neutral-950 font-semibold uppercase tracking-wider rounded-full shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all duration-200"
+          className="flex-1 flex items-center justify-center gap-2 py-3.5 bg-primary-500 hover:bg-primary-400 text-neutral-950 font-semibold uppercase tracking-wider rounded-full shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all duration-200"
         >
-          Continue to Review
+          Continue to Delivery
+          <ArrowRight className="w-4 h-4" />
         </button>
       </div>
     </form>

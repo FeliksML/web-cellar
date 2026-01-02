@@ -8,7 +8,7 @@ import type { Product } from "../types";
 import { getMockProductBySlug } from "../data/mock-products";
 
 // Set to true to always use mock data (for development without backend)
-const USE_MOCK_DATA = false;
+const USE_MOCK_DATA = true;
 
 async function fetchProduct(slug: string): Promise<Product> {
   // Use mock data if enabled

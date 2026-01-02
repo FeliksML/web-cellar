@@ -210,3 +210,13 @@ export function getGuestCartForMerge(): {
     items: useCartStore.getState().items,
   };
 }
+
+/**
+ * Alias for backwards compatibility
+ */
+export const useCartSummary = useGuestCartSummary;
+
+/**
+ * Type alias for backwards compatibility
+ */
+export type CartItem = LocalCartItem;

@@ -20,8 +20,8 @@ import {
   useGuestCartSummary,
   type LocalCartItem,
 } from "../stores/cart-store";
-import { getSessionId, clearSessionId } from "../utils/session";
-import type { ProductListItem, ServerCart, ServerCartItem } from "../types";
+import { getSessionId } from "../utils/session";
+import type { ProductListItem, ServerCartItem } from "../types";
 
 export interface UnifiedCartItem {
   id: number;
