@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { OutlinePillButton } from "@/components/ui/outline-pill-button";
 import { heroContent } from "../data/landing.data";
 import { FloatingHeroImage } from "./floating-hero-image";
@@ -16,7 +17,9 @@ export function HeroSection() {
             {heroContent.subline}
           </p>
           <div className="pt-4 flex justify-center">
-            <OutlinePillButton size="md">{heroContent.ctaText}</OutlinePillButton>
+            <Link to="/shop">
+              <OutlinePillButton size="md">{heroContent.ctaText}</OutlinePillButton>
+            </Link>
           </div>
         </div>
 
