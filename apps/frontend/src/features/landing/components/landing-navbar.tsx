@@ -1,8 +1,13 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { OutlinePillButton } from "@/components/ui/outline-pill-button";
 import { navLinks } from "../data/landing.data";
+import { MobileNavDrawer } from "./mobile-nav-drawer";
 
 export function LandingNavbar() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { pathname } = useLocation();
+
   return (
     <nav className="sticky top-0 z-50 backdrop-blur bg-neutral-950/40">
       <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
@@ -36,19 +41,41 @@ export function LandingNavbar() {
           </div>
 
           {/* Right: CTA */}
-          <div className="flex items-center">
-            <OutlinePillButton size="sm" className="hidden sm:inline-flex border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-neutral-950">
-              SHOP NOW
-            </OutlinePillButton>
+          <div className="flex items-center gap-2">
+            {/* Only show Shop Now when not already on shop page */}
+            {!pathname.startsWith("/shop") && (
+              <Link to="/shop">
+                <OutlinePillButton size="sm" className="hidden sm:inline-flex border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-neutral-950">
+                  SHOP NOW
+                </OutlinePillButton>
+              </Link>
+            )}
 
-            {/* Mobile Menu Icon Placeholder (for future implementation) */}
-            <button className="md:hidden p-2 text-neutral-200">
-              <span className="sr-only">Open menu</span>
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+            {/* Mobile Menu Toggle */}
+            <button
+              className="md:hidden p-2 text-neutral-200"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <span className="sr-only">{mobileMenuOpen ? "Close menu" : "Open menu"}</span>
+              {mobileMenuOpen ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Navigation Drawer */}
+      <MobileNavDrawer
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+      />
     </nav>
   );
 }

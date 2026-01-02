@@ -1,5 +1,6 @@
 // Landing feature public API
 export { LandingNavbar } from "./components/landing-navbar";
+export { MobileNavDrawer } from "./components/mobile-nav-drawer";
 export { HeroSection } from "./components/hero-section";
 export { FreshnessSection } from "./components/freshness-section";
 export { BenefitsSection } from "./components/benefits-section";
