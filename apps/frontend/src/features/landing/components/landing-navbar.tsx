@@ -26,17 +26,22 @@ export function LandingNavbar() {
             </Link>
           </div>
 
-          {/* Center: Nav links (hidden on mobile) */}
-          <div className="hidden md:flex items-center gap-10 lg:gap-16">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
-                className="text-sm font-medium uppercase tracking-[0.2em] text-neutral-300 hover:text-primary-400 transition-colors"
-                style={{ textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}
-              >
-                {link.label}
-              </Link>
+          {/* Center: Nav links with golden dividers (hidden on mobile) */}
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
+            {navLinks.map((link, index) => (
+              <div key={link.label} className="flex items-center gap-6 lg:gap-8">
+                {/* Golden divider before each link (except first) */}
+                {index > 0 && (
+                  <div className="h-4 w-px bg-gradient-to-b from-transparent via-primary-500 to-transparent opacity-60" />
+                )}
+                <Link
+                  to={link.href}
+                  className="text-sm font-medium uppercase tracking-[0.2em] text-neutral-300 hover:text-primary-400 transition-colors"
+                  style={{ textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}
+                >
+                  {link.label}
+                </Link>
+              </div>
             ))}
           </div>
 
