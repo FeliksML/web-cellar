@@ -24,12 +24,19 @@ export function LandingNavbar() {
           <div className="md:hidden w-10" />
 
           {/* Center: Logo */}
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center -ml-4 md:ml-0">
             <Link
               to="/"
-              className="flex items-center justify-center h-10 w-10 rounded-full bg-primary-500 transition-transform hover:scale-105"
+              className="group relative flex items-center justify-center transition-transform hover:scale-105"
             >
-              <span className="text-neutral-900 font-bold text-sm">BB</span>
+              {/* Glow effect backing */}
+              <div className="absolute inset-0 bg-primary-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+              <img
+                src="/beasty-logo.png"
+                alt="Beasty Baker"
+                className="relative h-16 md:h-20 w-auto object-contain drop-shadow-[0_0_15px_rgba(217,158,59,0.3)]"
+              />
             </Link>
           </div>
 

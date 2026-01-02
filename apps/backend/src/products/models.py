@@ -1,12 +1,16 @@
 """Product and Category models."""
 
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
+from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, Numeric, String, Text
+from sqlalchemy import ForeignKey, JSON, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.database import Base
+
+if TYPE_CHECKING:
+    from src.reviews.models import Review
 
 
 class Category(Base):
@@ -69,6 +73,24 @@ class Product(Base):
     is_vegan: Mapped[bool] = mapped_column(default=False)
     is_keto_friendly: Mapped[bool] = mapped_column(default=False)
 
+    # Bakery-specific: ordering constraints
+    lead_time_hours: Mapped[int] = mapped_column(default=0)  # 0=same day, 24=next day
+    minimum_quantity: Mapped[int] = mapped_column(default=1)  # Min order quantity
+    quantity_increment: Mapped[int] = mapped_column(default=1)  # Order in multiples
+
+    # Allergens (JSON array: ["milk", "eggs", "wheat", "nuts", "soy"])
+    allergens: Mapped[list[str] | None] = mapped_column(JSON)
+
+    # Availability windows
+    is_seasonal: Mapped[bool] = mapped_column(default=False)
+    available_from: Mapped[date | None] = mapped_column()
+    available_until: Mapped[date | None] = mapped_column()
+    available_days: Mapped[list[int] | None] = mapped_column(JSON)  # [0,1,2,3,4] = Mon-Fri
+
+    # Reviews (cached for performance)
+    average_rating: Mapped[Decimal | None] = mapped_column(Numeric(2, 1))
+    review_count: Mapped[int] = mapped_column(default=0)
+
     # Status
     is_active: Mapped[bool] = mapped_column(default=True, index=True)
 
@@ -82,6 +104,10 @@ class Product(Base):
     images: Mapped[list["ProductImage"]] = relationship(
         back_populates="product",
         order_by="ProductImage.display_order",
+        cascade="all, delete-orphan",
+    )
+    reviews: Mapped[list["Review"]] = relationship(
+        back_populates="product",
         cascade="all, delete-orphan",
     )
 
@@ -117,6 +143,18 @@ class Product(Base):
         if not self.track_inventory:
             return False
         return self.stock_quantity <= self.low_stock_threshold
+
+    @property
+    def is_currently_available(self) -> bool:
+        """Check if product is available based on seasonal dates."""
+        if not self.is_seasonal:
+            return True
+        today = date.today()
+        if self.available_from and today < self.available_from:
+            return False
+        if self.available_until and today > self.available_until:
+            return False
+        return True
 
 
 class ProductImage(Base):

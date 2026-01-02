@@ -8,7 +8,7 @@ import type { PaginatedProducts, ProductFilters } from "../types";
 import { getMockProducts } from "../data/mock-products";
 
 // Set to true to always use mock data (for development without backend)
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 async function fetchProducts(
   filters: ProductFilters = {}

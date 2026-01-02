@@ -8,7 +8,7 @@ import type { Category } from "../types";
 import { MOCK_CATEGORIES } from "../data/mock-categories";
 
 // Set to true to always use mock data (for development without backend)
-const USE_MOCK_DATA = true;
+const USE_MOCK_DATA = false;
 
 async function fetchCategories(): Promise<Category[]> {
   // Use mock data if enabled

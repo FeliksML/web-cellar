@@ -58,6 +58,19 @@ export interface Product {
   is_low_stock: boolean;
   images: ProductImage[];
   category: Category | null;
+
+  // Bakery-specific fields
+  lead_time_hours: number;
+  minimum_quantity: number;
+  quantity_increment: number;
+  allergens: string[] | null;
+  is_seasonal: boolean;
+  available_from: string | null;
+  available_until: string | null;
+  available_days: number[] | null;
+  average_rating: number | null;
+  review_count: number;
+  is_currently_available: boolean;
 }
 
 export interface ProductListItem {
@@ -81,6 +94,14 @@ export interface ProductListItem {
   is_in_stock: boolean;
   primary_image_url: string | null;
   category: Category | null;
+
+  // Bakery-specific fields
+  lead_time_hours: number;
+  minimum_quantity: number;
+  quantity_increment: number;
+  allergens: string[] | null;
+  average_rating: number | null;
+  review_count: number;
 }
 
 export interface PaginatedProducts {
@@ -106,5 +127,52 @@ export interface ProductFilters {
   sort_order?: "asc" | "desc";
   page?: number;
   page_size?: number;
+}
+
+// Server cart types
+export interface ServerCartItem {
+  id: number;
+  product_id: number;
+  quantity: number;
+  unit_price: number;
+  special_instructions: string | null;
+  line_total: number;
+  product: ProductListItem;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ServerCart {
+  id: number;
+  user_id: number | null;
+  session_id: string | null;
+  requested_delivery_date: string | null;
+  delivery_time_slot: string | null;
+  items: ServerCartItem[];
+  item_count: number;
+  subtotal: number;
+  is_empty: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CartItemCreate {
+  product_id: number;
+  quantity: number;
+  special_instructions?: string;
+}
+
+export interface CartItemUpdate {
+  quantity?: number;
+  special_instructions?: string;
+}
+
+export interface CartDeliveryUpdate {
+  requested_delivery_date?: string;
+  delivery_time_slot?: "morning" | "afternoon" | "evening";
+}
+
+export interface CartMergeRequest {
+  session_id: string;
 }
 

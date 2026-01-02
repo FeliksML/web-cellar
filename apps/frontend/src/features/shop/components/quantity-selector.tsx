@@ -1,5 +1,6 @@
 /**
  * Quantity selector component
+ * Supports bakery-specific minimum quantities and quantity increments
  */
 
 interface QuantitySelectorProps {
@@ -7,7 +8,9 @@ interface QuantitySelectorProps {
   onChange: (quantity: number) => void;
   min?: number;
   max?: number;
+  increment?: number;
   disabled?: boolean;
+  showLabel?: boolean;
 }
 
 export function QuantitySelector({
@@ -15,19 +18,26 @@ export function QuantitySelector({
   onChange,
   min = 1,
   max = 99,
+  increment = 1,
   disabled = false,
+  showLabel = false,
 }: QuantitySelectorProps) {
   const decrease = () => {
-    if (quantity > min) {
-      onChange(quantity - 1);
+    const newQuantity = quantity - increment;
+    if (newQuantity >= min) {
+      onChange(newQuantity);
     }
   };
 
   const increase = () => {
-    if (quantity < max) {
-      onChange(quantity + 1);
+    const newQuantity = quantity + increment;
+    if (newQuantity <= max) {
+      onChange(newQuantity);
     }
   };
+
+  // Show helper text for non-standard increments
+  const showIncrementHint = increment > 1 && showLabel;
 
   return (
     <div className="flex items-center gap-2">
@@ -78,6 +88,53 @@ export function QuantitySelector({
           />
         </svg>
       </button>
+
+      {showIncrementHint && (
+        <span className="text-xs text-foreground/50 ml-1">
+          (sold in {increment}s)
+        </span>
+      )}
+    </div>
+  );
+}
+
+/**
+ * Bakery quantity selector with product constraints
+ */
+interface BakeryQuantitySelectorProps {
+  quantity: number;
+  onChange: (quantity: number) => void;
+  minimumQuantity: number;
+  quantityIncrement: number;
+  maxQuantity?: number;
+  disabled?: boolean;
+}
+
+export function BakeryQuantitySelector({
+  quantity,
+  onChange,
+  minimumQuantity,
+  quantityIncrement,
+  maxQuantity = 99,
+  disabled = false,
+}: BakeryQuantitySelectorProps) {
+  return (
+    <div className="space-y-1">
+      <QuantitySelector
+        quantity={quantity}
+        onChange={onChange}
+        min={minimumQuantity}
+        max={maxQuantity}
+        increment={quantityIncrement}
+        disabled={disabled}
+      />
+      {(minimumQuantity > 1 || quantityIncrement > 1) && (
+        <p className="text-xs text-foreground/50">
+          {minimumQuantity > 1 && `Min: ${minimumQuantity}`}
+          {minimumQuantity > 1 && quantityIncrement > 1 && " · "}
+          {quantityIncrement > 1 && `Sold in ${quantityIncrement}s`}
+        </p>
+      )}
     </div>
   );
 }

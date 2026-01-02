@@ -25,6 +25,21 @@ class Settings(BaseSettings):
     ENVIRONMENT: str = "development"
     BACKEND_CORS_ORIGINS: str = "http://localhost:3000"
 
+    # Stripe Payment
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_WEBHOOK_SECRET: str = ""
+    STRIPE_PUBLISHABLE_KEY: str = ""
+
+    # Email (Resend or console for dev)
+    EMAIL_PROVIDER: str = "console"  # "resend" or "console"
+    EMAIL_API_KEY: str = ""
+    EMAIL_FROM_ADDRESS: str = "orders@beastybaker.com"
+
+    # Business Settings
+    STORE_NAME: str = "Beasty Baker"
+    DEFAULT_LEAD_TIME_HOURS: int = 24
+    ORDER_CUTOFF_HOUR: int = 14  # 2pm - orders after this require extra day
+
     @property
     def cors_origins(self) -> list[str]:
         """Parse CORS origins from comma-separated string."""

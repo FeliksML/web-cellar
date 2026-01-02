@@ -1,9 +1,16 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.database import Base
+
+if TYPE_CHECKING:
+    from src.addresses.models import Address
+    from src.cart.models import Cart
+    from src.orders.models import Order
+    from src.reviews.models import Review
 
 
 class User(Base):
@@ -27,6 +34,20 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(
         default=datetime.utcnow, onupdate=datetime.utcnow
+    )
+
+    # Relationships
+    addresses: Mapped[list["Address"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    cart: Mapped["Cart | None"] = relationship(
+        back_populates="user", cascade="all, delete-orphan", uselist=False
+    )
+    orders: Mapped[list["Order"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
+    )
+    reviews: Mapped[list["Review"]] = relationship(
+        back_populates="user", cascade="all, delete-orphan"
     )
 
     @property
