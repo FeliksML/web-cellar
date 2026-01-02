@@ -1,6 +1,6 @@
 /**
  * Checkout page - Multi-step checkout flow
- * Steps: Cart Review → Shipping → Delivery → Confirmation
+ * Steps: Cart Review → Shipping → Delivery → Payment → Confirmation
  */
 
 import { useState, useEffect, useMemo } from "react";
@@ -12,6 +12,7 @@ import {
   OrderSummary,
   CheckoutSuccess,
   DeliveryStep,
+  PaymentStep,
   useCheckoutStore,
   type ShippingAddress,
   type CheckoutStep,
@@ -76,9 +77,24 @@ export function CheckoutPage() {
     setStep("delivery");
   };
 
-  // Handle delivery step submission - creates the order
-  const handleDeliverySubmit = async (preferences: DeliveryPreferences) => {
+  // Handle delivery step submission - go to payment
+  const handleDeliverySubmit = (preferences: DeliveryPreferences) => {
     setDeliveryPreferences(preferences);
+    setStep("payment");
+  };
+
+  // Calculate cart total for payment step
+  const cartTotal = useMemo(() => {
+    const subtotal = cart.items.reduce(
+      (sum, item) => sum + item.product.price * item.quantity,
+      0
+    );
+    const shippingCost = deliveryPreferences?.fulfillmentType === "pickup" ? 0 : 5.99;
+    return subtotal + shippingCost;
+  }, [cart.items, deliveryPreferences?.fulfillmentType]);
+
+  // Handle payment step submission - creates the order
+  const handlePaymentSubmit = async () => {
     setOrderError(null);
 
     try {
@@ -100,15 +116,15 @@ export function CheckoutPage() {
         } : undefined,
 
         // Fulfillment
-        fulfillment_type: preferences.fulfillmentType,
-        requested_date: preferences.requestedDate,
-        requested_time_slot: preferences.timeSlot ?? undefined,
+        fulfillment_type: deliveryPreferences?.fulfillmentType ?? "delivery",
+        requested_date: deliveryPreferences?.requestedDate ?? "",
+        requested_time_slot: deliveryPreferences?.timeSlot ?? undefined,
 
         // Contact
         contact_email: shippingAddress?.email || "",
         contact_phone: shippingAddress?.phone ?? undefined,
 
-        // Payment (placeholder - will integrate Stripe later)
+        // Payment
         payment_method: "stripe",
       };
 
@@ -129,14 +145,25 @@ export function CheckoutPage() {
     }
   };
 
+  // Determine step status for indicators
+  const getStepStatus = (targetStep: CheckoutStep): "pending" | "current" | "completed" => {
+    const stepOrder: CheckoutStep[] = ["cart", "shipping", "delivery", "payment", "confirmation"];
+    const currentIndex = stepOrder.indexOf(step);
+    const targetIndex = stepOrder.indexOf(targetStep);
+
+    if (step === targetStep) return "current";
+    if (currentIndex > targetIndex) return "completed";
+    return "pending";
+  };
+
   // Step indicator component
   const stepIndicator = (
-    <div className="flex items-center justify-center gap-2 sm:gap-4 mb-8">
+    <div className="flex items-center justify-center gap-1 sm:gap-2 mb-8">
       {/* Cart step */}
       <StepButton
         number={1}
         label="Cart"
-        status={step === "cart" ? "current" : "completed"}
+        status={getStepStatus("cart")}
         onClick={() => step !== "confirmation" && setStep("cart")}
         disabled={step === "confirmation"}
       />
@@ -147,15 +174,9 @@ export function CheckoutPage() {
       <StepButton
         number={2}
         label="Shipping"
-        status={
-          step === "shipping"
-            ? "current"
-            : step === "delivery" || step === "confirmation"
-            ? "completed"
-            : "pending"
-        }
+        status={getStepStatus("shipping")}
         onClick={() =>
-          (step === "shipping" || step === "delivery") && setStep("shipping")
+          ["shipping", "delivery", "payment"].includes(step) && setStep("shipping")
         }
         disabled={step === "cart" || step === "confirmation"}
       />
@@ -166,24 +187,31 @@ export function CheckoutPage() {
       <StepButton
         number={3}
         label="Delivery"
-        status={
-          step === "delivery"
-            ? "current"
-            : step === "confirmation"
-            ? "completed"
-            : "pending"
+        status={getStepStatus("delivery")}
+        onClick={() =>
+          ["delivery", "payment"].includes(step) && setStep("delivery")
         }
-        onClick={() => step === "delivery" && setStep("delivery")}
-        disabled={step !== "delivery"}
+        disabled={!["delivery", "payment"].includes(step)}
+      />
+
+      <StepDivider />
+
+      {/* Payment step */}
+      <StepButton
+        number={4}
+        label="Payment"
+        status={getStepStatus("payment")}
+        onClick={() => step === "payment" && setStep("payment")}
+        disabled={step !== "payment"}
       />
 
       <StepDivider />
 
       {/* Confirmation step */}
       <StepButton
-        number={4}
-        label="Confirm"
-        status={step === "confirmation" ? "current" : "pending"}
+        number={5}
+        label="Done"
+        status={getStepStatus("confirmation")}
         disabled
       />
     </div>
@@ -268,6 +296,14 @@ export function CheckoutPage() {
                     minLeadTimeHours={maxLeadTimeHours}
                     onSubmit={handleDeliverySubmit}
                     onBack={() => setStep("shipping")}
+                  />
+                )}
+
+                {step === "payment" && (
+                  <PaymentStep
+                    total={cartTotal}
+                    onSubmit={handlePaymentSubmit}
+                    onBack={() => setStep("delivery")}
                     isSubmitting={createOrderMutation.isPending}
                   />
                 )}

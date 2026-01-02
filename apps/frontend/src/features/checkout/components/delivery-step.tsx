@@ -14,7 +14,6 @@ interface DeliveryStepProps {
   minLeadTimeHours: number;
   onSubmit: (preferences: DeliveryPreferences) => void;
   onBack: () => void;
-  isSubmitting?: boolean;
 }
 
 // Store address for pickup (would come from config in production)
@@ -30,7 +29,6 @@ export function DeliveryStep({
   minLeadTimeHours,
   onSubmit,
   onBack,
-  isSubmitting = false,
 }: DeliveryStepProps) {
   const [fulfillmentType, setFulfillmentType] = useState<FulfillmentType>(
     initialPreferences?.fulfillmentType || "delivery"
@@ -194,8 +192,7 @@ export function DeliveryStep({
         <button
           type="button"
           onClick={onBack}
-          disabled={isSubmitting}
-          className="flex-1 flex items-center justify-center gap-2 py-3 px-4 border border-neutral-700 rounded-lg hover:bg-neutral-800 transition disabled:opacity-50"
+          className="flex-1 flex items-center justify-center gap-2 py-3 px-4 border border-neutral-700 rounded-lg hover:bg-neutral-800 transition"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Shipping
@@ -204,17 +201,11 @@ export function DeliveryStep({
         <button
           type="button"
           onClick={handleSubmit}
-          disabled={isSubmitting || !selectedDate}
+          disabled={!selectedDate}
           className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isSubmitting ? (
-            "Processing..."
-          ) : (
-            <>
-              Place Order
-              <ArrowRight className="w-4 h-4" />
-            </>
-          )}
+          Continue to Payment
+          <ArrowRight className="w-4 h-4" />
         </button>
       </div>
     </div>

@@ -14,6 +14,10 @@ export { DeliveryDatePicker } from "./components/delivery-date-picker";
 export { TimeSlotPicker, TimeSlotSelector } from "./components/time-slot-picker";
 export { DeliveryStep } from "./components/delivery-step";
 
+// Payment components
+export { PaymentForm, MockPaymentForm } from "./components/payment-form";
+export { PaymentStep } from "./components/payment-step";
+
 // Store
 export {
   useCheckoutStore,

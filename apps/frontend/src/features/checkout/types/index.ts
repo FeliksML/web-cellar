@@ -33,8 +33,8 @@ export interface DeliveryPreferences {
   timeSlot: TimeSlot | null;
 }
 
-// Checkout steps - now includes delivery step
-export type CheckoutStep = "cart" | "shipping" | "delivery" | "confirmation";
+// Checkout steps - includes delivery and payment steps
+export type CheckoutStep = "cart" | "shipping" | "delivery" | "payment" | "confirmation";
 
 // Legacy types for backward compatibility during transition
 export interface OrderItem {

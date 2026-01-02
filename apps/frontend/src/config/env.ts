@@ -1,6 +1,7 @@
 const envSchema = {
   VITE_API_URL: import.meta.env.VITE_API_URL,
   VITE_APP_NAME: import.meta.env.VITE_APP_NAME,
+  VITE_STRIPE_PUBLISHABLE_KEY: import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY,
 } as const;
 
 // Validate required environment variables
@@ -15,4 +16,5 @@ for (const key of requiredVars) {
 export const env = {
   apiUrl: envSchema.VITE_API_URL || "http://localhost:8000",
   appName: envSchema.VITE_APP_NAME || "Web Cellar",
+  stripePublishableKey: envSchema.VITE_STRIPE_PUBLISHABLE_KEY || "",
 } as const;
