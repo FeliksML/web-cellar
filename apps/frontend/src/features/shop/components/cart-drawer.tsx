@@ -3,6 +3,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCartStore, useCartSummary, type CartItem } from "../stores/cart-store";
 
 function CartItemRow({ item }: { item: CartItem }) {
@@ -90,9 +91,15 @@ function CartItemRow({ item }: { item: CartItem }) {
 }
 
 export function CartDrawer() {
+  const navigate = useNavigate();
   const { items, isOpen, closeCart, clearCart } = useCartStore();
   const { subtotal, isEmpty } = useCartSummary();
   const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleCheckout = () => {
+    closeCart();
+    navigate("/checkout");
+  };
 
   // Handle entrance animation
   useEffect(() => {
@@ -218,6 +225,7 @@ export function CartDrawer() {
 
             {/* Checkout button */}
             <button
+              onClick={handleCheckout}
               className="w-full py-3.5 bg-primary-500 hover:bg-primary-400 text-neutral-950 font-semibold uppercase tracking-wider rounded-full shadow-lg shadow-primary-500/25 hover:shadow-primary-500/40 transition-all duration-200"
             >
               Proceed to Checkout

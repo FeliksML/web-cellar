@@ -3,6 +3,7 @@
  */
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import type { ProductListItem } from "../types";
 import { DietaryBadges } from "./dietary-badges";
 import { PriceDisplay } from "./price-display";
@@ -20,11 +21,14 @@ export function ShopProductCard({
 }: ShopProductCardProps) {
   const [isAdding, setIsAdding] = useState(false);
 
-  const handleClick = () => {
+  const handleQuickView = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
     onQuickView?.(product);
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     if (isAdding) return;
 
@@ -41,16 +45,9 @@ export function ShopProductCard({
   const glowColor = product.gradient_from || "#6366F1";
 
   return (
-    <div
-      className="group cursor-pointer text-center transition-all duration-300 hover:-translate-y-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 rounded-2xl"
-      onClick={handleClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          handleClick();
-        }
-      }}
+    <Link
+      to={`/shop/${product.slug}`}
+      className="group block text-center transition-all duration-300 hover:-translate-y-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 rounded-2xl"
     >
       {/* Product image with glow effect */}
       <div
@@ -103,33 +100,49 @@ export function ShopProductCard({
           </div>
         )}
 
-        {/* Quick add button - shows on hover */}
-        {product.is_in_stock && onAddToCart && (
-          <button
-            onClick={handleAddToCart}
-            disabled={isAdding}
-            className={`
-              absolute bottom-3 left-1/2 -translate-x-1/2 font-semibold text-sm px-4 py-2 rounded-full
-              opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg
-              transform ${isAdding ? "scale-110" : "hover:scale-105"}
-              ${isAdding
-                ? "bg-secondary-500 text-white"
-                : "bg-primary-500 hover:bg-primary-600 text-neutral-950"
-              }
-            `}
-          >
-            {isAdding ? (
-              <span className="flex items-center gap-1.5">
-                <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                </svg>
-                Added!
-              </span>
-            ) : (
-              "Add to Cart"
-            )}
-          </button>
-        )}
+        {/* Action buttons - show on hover */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-200">
+          {/* Quick View button */}
+          {onQuickView && (
+            <button
+              onClick={handleQuickView}
+              className="p-2.5 rounded-full bg-neutral-800/90 border border-neutral-700/50 text-neutral-300 hover:text-white hover:border-neutral-600/50 transition-all shadow-lg"
+              aria-label="Quick view"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </button>
+          )}
+
+          {/* Add to Cart button */}
+          {product.is_in_stock && onAddToCart && (
+            <button
+              onClick={handleAddToCart}
+              disabled={isAdding}
+              className={`
+                font-semibold text-sm px-4 py-2 rounded-full transition-all duration-200 shadow-lg
+                transform ${isAdding ? "scale-105" : "hover:scale-105"}
+                ${isAdding
+                  ? "bg-secondary-500 text-white"
+                  : "bg-primary-500 hover:bg-primary-600 text-neutral-950"
+                }
+              `}
+            >
+              {isAdding ? (
+                <span className="flex items-center gap-1.5">
+                  <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                  Added!
+                </span>
+              ) : (
+                "Add to Cart"
+              )}
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Product info */}
@@ -155,6 +168,6 @@ export function ShopProductCard({
           </p>
         )}
       </div>
-    </div>
+    </Link>
   );
 }
