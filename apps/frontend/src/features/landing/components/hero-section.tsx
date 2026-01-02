@@ -39,33 +39,29 @@ export function HeroSection() {
 
           {/* Products grid */}
           <div className="relative z-10 flex flex-col items-center gap-8 md:flex-row md:justify-center md:gap-10 lg:gap-16">
-            {/* Left product - Blueberry Lemon */}
-            <div className="relative">
-              <div
-                className="w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-2xl drop-shadow-xl overflow-hidden"
-                style={{
-                  background: "linear-gradient(135deg, #6366F1, #8B5CF6)",
-                }}
-              >
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-center p-6">
-                    <div className="w-32 h-40 mx-auto rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
-                      <span className="text-white/60 text-xs font-medium uppercase tracking-wider">
-                        Blueberry
-                        <br />
-                        Lemon
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right product - Pistachio Matcha (cupcake image) */}
+            {/* Left product - Blueberry Lemon Pie */}
             <div className="relative flex items-center justify-center">
               <FloatingHeroImage
-                src="/cupcake_8k_transparent_glow.png"
-                alt="Pistachio Matcha cupcake with glow effect"
+                src="/blueberry_lemon_pie.png"
+                alt="Blueberry Lemon Pie with mint"
+                glowVariant="purple"
+                className="
+                  w-[80vw] max-w-[320px]
+                  sm:w-[60vw] sm:max-w-[360px]
+                  md:w-[40vw] md:max-w-[400px]
+                  lg:w-[45vw] lg:max-w-[480px]
+                  xl:max-w-[520px]
+                  mx-auto md:mx-0
+                "
+              />
+            </div>
+
+            {/* Right product - Pistachio Strawberry Cupcake */}
+            <div className="relative flex items-center justify-center">
+              <FloatingHeroImage
+                src="/pistachio_strawberry_cupcake.png"
+                alt="Pistachio Strawberry Cupcake with matcha"
+                glowVariant="default"
                 className="
                   w-[80vw] max-w-[320px]
                   sm:w-[60vw] sm:max-w-[360px]

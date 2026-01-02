@@ -135,6 +135,12 @@ body {
           drop-shadow(0 16px 48px rgba(57, 199, 139, 0.1));
 }
 
+/* Hero image glow - purple variant for blueberry products */
+.hero-image-glow-purple {
+  filter: drop-shadow(0 8px 24px rgba(155, 107, 255, 0.2))
+          drop-shadow(0 16px 48px rgba(99, 102, 241, 0.15));
+}
+
 /* Shimmer animation for loading skeletons */
 @keyframes shimmer {
   0% {

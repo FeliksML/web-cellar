@@ -10,6 +10,8 @@ interface FloatingHeroImageProps {
   parallax?: boolean;
   /** Custom className for additional styling */
   className?: string;
+  /** Glow effect variant. Default: "default" (green-gold) */
+  glowVariant?: "default" | "purple";
 }
 
 export function FloatingHeroImage({
@@ -18,6 +20,7 @@ export function FloatingHeroImage({
   animate = true,
   parallax = true,
   className = "",
+  glowVariant = "default",
 }: FloatingHeroImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(false);
@@ -84,7 +87,7 @@ export function FloatingHeroImage({
           className={`
             w-full h-auto object-contain
             ${animate ? "animate-float-gentle" : ""}
-            hero-image-glow
+            ${glowVariant === "purple" ? "hero-image-glow-purple" : "hero-image-glow"}
             transition-opacity duration-700
             ${isLoaded ? "opacity-100" : "opacity-0"}
           `}
