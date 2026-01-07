@@ -102,14 +102,19 @@ export function BenefitItem({ benefit }: BenefitItemProps) {
   const Icon = iconMap[benefit.icon];
 
   return (
-    <div className="text-center">
-      <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-primary-500/20 flex items-center justify-center">
-        <Icon className="text-primary-300" />
+    <div className="text-center group">
+      {/* Icon with subtle glow on hover */}
+      <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-primary-500/15 flex items-center justify-center transition-all duration-300 group-hover:bg-primary-500/25 group-hover:scale-110">
+        <Icon className="w-6 h-6 text-primary-400" />
       </div>
-      <h3 className="mt-4 font-sans font-semibold text-base text-neutral-100">
+
+      {/* Title with Playfair Display */}
+      <h3 className="mt-4 font-display font-semibold text-base sm:text-lg text-primary-200">
         {benefit.title}
       </h3>
-      <p className="mt-2 text-sm leading-relaxed text-neutral-300">
+
+      {/* Description */}
+      <p className="mt-2 text-sm leading-relaxed text-neutral-400">
         {benefit.body}
       </p>
     </div>

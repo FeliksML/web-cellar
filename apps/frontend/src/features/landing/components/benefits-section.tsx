@@ -6,7 +6,7 @@ export function BenefitsSection() {
   return (
     <section className="py-16 md:py-20">
       <div className="mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
-        <SectionTitle>WHY BEASTY BAKER IS DIFFERENT</SectionTitle>
+        <SectionTitle>The Beasty Promise</SectionTitle>
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {benefits.map((benefit, index) => (
             <div

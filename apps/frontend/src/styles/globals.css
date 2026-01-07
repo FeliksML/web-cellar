@@ -2,6 +2,10 @@
 
 /* Beasty Baker Brand Color Theme */
 @theme {
+  /* Font families */
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
   /* Primary: Gold/Amber */
   --color-primary-50: #FFF7E6;
   --color-primary-100: #FFE8BF;
@@ -47,9 +51,14 @@
 }
 
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
+}
+
+/* Display font utility class for headlines */
+.font-display {
+  font-family: var(--font-display);
 }
 
 /* Light mode defaults */
@@ -139,6 +148,16 @@ body {
 .hero-image-glow-purple {
   filter: drop-shadow(0 8px 24px rgba(155, 107, 255, 0.2))
           drop-shadow(0 16px 48px rgba(99, 102, 241, 0.15));
+}
+
+/* Purple gradient for hero section background */
+.hero-purple-gradient {
+  background: radial-gradient(
+    ellipse at center top,
+    rgba(139, 92, 246, 0.12) 0%,
+    rgba(99, 102, 241, 0.06) 30%,
+    transparent 60%
+  );
 }
 
 /* Shimmer animation for loading skeletons */
