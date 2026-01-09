@@ -9,6 +9,7 @@ export { SectionTitle } from "./components/section-title";
 export { BenefitItem } from "./components/benefit-item";
 export { ProductCard } from "./components/product-card";
 export { FloatingHeroImage } from "./components/floating-hero-image";
+export { BottomTabBar } from "./components/bottom-tab-bar";
 
 // Hooks
 export { useScrollParallax } from "./hooks/use-scroll-parallax";

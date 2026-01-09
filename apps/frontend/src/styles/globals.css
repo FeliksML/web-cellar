@@ -48,6 +48,21 @@
   /* Accent: Glow colors */
   --color-glow-purple: #9B6BFF;
   --color-glow-green-gold: #E1CE71;
+
+  /* Landing page specific colors */
+  --color-bg-top: #070909;
+  --color-bg-mid: #25272D;
+  --color-bg-bottom: #2C2B30;
+  --color-text-hero: #FDFDEF;
+  --color-text-muted: #929295;
+  --color-gold: #D8B571;
+  --color-gold-button-top: #D8AB4E;
+  --color-gold-button-bottom: #D4A649;
+  --color-feature-gold: #DFBE7B;
+  --color-feature-green: #98A65D;
+  --color-feature-blue: #636B93;
+  --color-tab-bg: #333238;
+  --color-tab-border: #353439;
 }
 
 :root {
@@ -179,4 +194,42 @@ body {
   .animate-shimmer {
     animation: none;
   }
+}
+
+/* Landing page gradient background */
+.landing-bg-gradient {
+  background:
+    radial-gradient(ellipse at 50% 30%, #25272D 0%, rgba(37,39,45,0) 55%),
+    linear-gradient(180deg, #070909 0%, #2C2B30 100%);
+}
+
+/* Vignette overlay for landing */
+.landing-vignette::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 120px rgba(0,0,0,0.55);
+}
+
+/* Gold CTA button */
+.btn-gold {
+  background: linear-gradient(180deg, #D8AB4E 0%, #D4A649 100%);
+  border: 1px solid rgba(0,0,0,0.18);
+  box-shadow: 0px 10px 22px rgba(0,0,0,0.35);
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.btn-gold:hover {
+  filter: brightness(1.05);
+}
+
+.btn-gold:active {
+  filter: brightness(0.96);
+  transform: translateY(1px);
+}
+
+/* Hero text shadow */
+.text-shadow-hero {
+  text-shadow: 0px 3px 10px rgba(0,0,0,0.65);
 }

@@ -1,93 +1,133 @@
 import { Link } from "react-router-dom";
-import { OutlinePillButton } from "@/components/ui/outline-pill-button";
-import { heroContent } from "../data/landing.data";
+import { heroContent, featureBadges, featureSubtext } from "../data/landing.data";
 
 export function HeroSection() {
   return (
-    <section className="relative pt-6 sm:pt-8 md:pt-12 pb-8 sm:pb-12 overflow-hidden hero-purple-gradient">
+    <section className="relative pt-6 pb-8 overflow-hidden">
       {/* Content container */}
-      <div className="relative z-10 mx-auto w-full max-w-screen-xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto w-full max-w-md px-8">
 
-        {/* 1. HEADLINE - Playfair Display serif font */}
-        <h1
-          className="text-center font-display font-semibold tracking-tight text-primary-400 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight"
-          style={{ textShadow: '0 2px 24px rgba(236, 180, 94, 0.35)' }}
-        >
-          {heroContent.headline}
+        {/* 1. HERO TITLE */}
+        <h1 className="text-center font-display font-semibold text-shadow-hero" style={{ color: "#FDFDEF" }}>
+          <span
+            className="block"
+            style={{
+              fontSize: "clamp(36px, 11vw, 44px)",
+              lineHeight: "1.05",
+              letterSpacing: "-0.6px"
+            }}
+          >
+            {heroContent.heroLine1}
+          </span>
+          <span
+            className="block"
+            style={{
+              fontSize: "clamp(36px, 11vw, 44px)",
+              lineHeight: "1.05",
+              letterSpacing: "-0.6px"
+            }}
+          >
+            {heroContent.heroLine2}
+          </span>
         </h1>
 
-        {/* 2. SUBLINE - with bullet separators */}
-        <p className="mt-3 sm:mt-4 text-center font-sans text-sm sm:text-base lg:text-lg text-neutral-300 tracking-wide">
-          {heroContent.subline}
-        </p>
-
-        {/* 3. CTA - above hero image */}
-        <div className="mt-5 sm:mt-6 flex justify-center">
-          <Link to="/shop">
-            <OutlinePillButton size="md">
-              {heroContent.ctaText}
-            </OutlinePillButton>
-          </Link>
-        </div>
-
-        {/* 4. SINGLE HERO PRODUCT - Blueberry Pie centerpiece */}
-        <div className="relative mt-6 sm:mt-8 flex justify-center">
-          {/* Purple glow behind the product */}
-          <div
-            className="
-              absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-              w-[80vw] h-[80vw]
-              max-w-[500px] max-h-[500px]
-              sm:max-w-[600px] sm:max-h-[600px]
-              md:max-w-[700px] md:max-h-[700px]
-              lg:max-w-[800px] lg:max-h-[800px]
-              rounded-full blur-3xl opacity-30
-              pointer-events-none
-            "
-            style={{ backgroundColor: '#9B6BFF' }}
-          />
-
-          {/* Hero product image - large and centered */}
-          <Link
-            to="/shop/blueberry-lemon-protein-cupcake"
-            className="group relative block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:ring-offset-4 focus-visible:ring-offset-neutral-950 rounded-2xl"
-          >
-            <img
-              src="/BP_FINAL.png"
-              alt="Blueberry Lemon Protein Treat - Our signature handcrafted dessert"
-              className="
-                relative z-10
-                w-[85vw] max-w-[380px]
-                sm:w-[75vw] sm:max-w-[480px]
-                md:w-[65vw] md:max-w-[560px]
-                lg:max-w-[640px]
-                xl:max-w-[720px]
-                h-auto
-                object-contain
-                animate-float-gentle
-                transition-transform duration-500 ease-out
-                group-hover:scale-[1.02]
-              "
-            />
-
-            {/* Product label on hover */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-4 opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 text-center">
-              <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-neutral-900/80 backdrop-blur-sm rounded-full text-sm text-primary-300 border border-primary-500/30">
-                View Product →
+        {/* 2. FEATURE BADGES */}
+        <div className="mt-6 text-center">
+          {/* Main badges row */}
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            {featureBadges.map((badge, index) => (
+              <span key={badge.text} className="flex items-center">
+                <span
+                  className="font-sans font-bold uppercase tracking-wider"
+                  style={{
+                    color: badge.color,
+                    fontSize: "12px",
+                    lineHeight: "14px",
+                    letterSpacing: "0.9px"
+                  }}
+                >
+                  {badge.text}
+                </span>
+                {index < featureBadges.length - 1 && (
+                  <span className="mx-2 text-neutral-600" style={{ fontSize: "12px" }}>
+                    •
+                  </span>
+                )}
               </span>
-            </div>
-          </Link>
-        </div>
-
-        {/* Product name label */}
-        <div className="mt-6 sm:mt-8 text-center">
-          <h2 className="font-display text-xl sm:text-2xl md:text-3xl font-semibold text-primary-200">
-            Blueberry Lemon
-          </h2>
-          <p className="mt-1 text-sm sm:text-base text-neutral-400 uppercase tracking-widest">
-            Protein Cupcake
+            ))}
+          </div>
+          {/* Subtext */}
+          <p
+            className="mt-1.5 font-sans font-bold uppercase tracking-wider"
+            style={{
+              color: featureSubtext.color,
+              fontSize: "12px",
+              lineHeight: "14px",
+              letterSpacing: "0.9px"
+            }}
+          >
+            {featureSubtext.text}
           </p>
         </div>
+
+        {/* 3. HERO IMAGE - Two muffins */}
+        <div className="relative mt-6 flex justify-center items-end h-[220px] sm:h-[260px] md:h-[300px]">
+          {/* Blueberry muffin - left */}
+          <img
+            src="/bluberry_pie.png"
+            alt="Blueberry protein muffin"
+            className="absolute left-0 bottom-0 w-[55%] max-w-[180px] sm:max-w-[200px] h-auto object-contain animate-float-gentle z-10"
+            style={{ animationDelay: "0s" }}
+          />
+          {/* Matcha/Pistachio muffin - right */}
+          <img
+            src="/final_strawberry_matcha.png"
+            alt="Pistachio matcha protein muffin"
+            className="absolute right-0 bottom-0 w-[55%] max-w-[180px] sm:max-w-[200px] h-auto object-contain animate-float-gentle"
+            style={{ animationDelay: "0.5s" }}
+          />
+        </div>
+
+        {/* 4. CTA BUTTON */}
+        <div className="mt-8 flex justify-center">
+          <Link
+            to="/shop"
+            className="btn-gold inline-flex items-center justify-center px-10 py-3 rounded-[10px] font-sans font-extrabold uppercase tracking-wider"
+            style={{
+              fontSize: "16px",
+              lineHeight: "16px",
+              letterSpacing: "0.8px",
+              color: "#141414"
+            }}
+          >
+            {heroContent.ctaText}
+          </Link>
+        </div>
+
+        {/* 5. SUPPORTING TEXT */}
+        <div className="mt-10 text-center">
+          <p
+            className="font-sans font-medium"
+            style={{
+              color: "#F1F1F1",
+              fontSize: "18px",
+              lineHeight: "24px"
+            }}
+          >
+            {heroContent.support1}
+          </p>
+          <p
+            className="font-sans font-medium"
+            style={{
+              color: "#F1F1F1",
+              fontSize: "18px",
+              lineHeight: "24px"
+            }}
+          >
+            {heroContent.support2}
+          </p>
+        </div>
+
       </div>
     </section>
   );

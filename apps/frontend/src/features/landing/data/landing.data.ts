@@ -7,9 +7,27 @@ export const navLinks: NavLink[] = [
 ];
 
 export const heroContent = {
-  headline: "Real Food Protein Treats",
-  subline: "Gluten-Free \u2022 No Preservatives \u2022 Made Fresh.",
+  heroLine1: "Real Food",
+  heroLine2: "Protein Treats",
   ctaText: "SHOP NOW",
+  support1: "Guilt-Free Indulgence.",
+  support2: "25g Protein Per Muffin.",
+};
+
+export interface FeatureBadge {
+  text: string;
+  color: string;
+}
+
+export const featureBadges: FeatureBadge[] = [
+  { text: "SUGAR-FREE", color: "#DFBE7B" },
+  { text: "FRESH BAKED", color: "#98A65D" },
+  { text: "GLUTEN-FREE", color: "#636B93" },
+];
+
+export const featureSubtext = {
+  text: "SHORT SHELF LIFE",
+  color: "#98A65D",
 };
 
 export const freshnessContent = {
