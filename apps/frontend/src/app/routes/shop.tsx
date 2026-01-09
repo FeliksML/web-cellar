@@ -3,7 +3,7 @@
  */
 
 import { useState } from "react";
-import { LandingNavbar } from "@/features/landing";
+import { LandingNavbar, BottomTabBar } from "@/features/landing";
 import {
   ProductGrid,
   ProductSort,
@@ -13,6 +13,7 @@ import {
   CartDrawer,
   SearchInput,
   DietaryFilterPills,
+  MobileShopView,
   useProducts,
   useFilterParams,
   useFilterStore,
@@ -21,9 +22,11 @@ import {
 } from "@/features/shop";
 import { ToastContainer } from "@/components/ui/toast";
 import { toastSuccess } from "@/stores/toast-store";
+import { useIsMobile } from "@/hooks/use-media-query";
 
 export function ShopPage() {
   const [selectedProduct, setSelectedProduct] = useState<ProductListItem | null>(null);
+  const isMobile = useIsMobile();
 
   const filterParams = useFilterParams();
   const { page, setPage } = useFilterStore();
@@ -49,6 +52,24 @@ export function ShopPage() {
     }
   };
 
+  // Mobile view
+  if (isMobile) {
+    return (
+      <div className="min-h-screen shop-mobile-bg">
+        <LandingNavbar />
+        <MobileShopView
+          products={data?.items || []}
+          isLoading={isLoading}
+          onAddToCart={handleAddToCart}
+        />
+        <BottomTabBar />
+        <CartDrawer />
+        <ToastContainer />
+      </div>
+    );
+  }
+
+  // Desktop view
   return (
     <div
       className="min-h-screen text-neutral-100 bg-cover bg-center bg-fixed bg-no-repeat"

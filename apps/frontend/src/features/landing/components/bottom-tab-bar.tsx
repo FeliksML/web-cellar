@@ -1,22 +1,23 @@
 import { Link, useLocation } from "react-router-dom";
+import { useCartStore } from "@/features/shop";
 
 interface TabItem {
   id: string;
   label: string;
   href: string;
   icon: "home" | "store" | "info" | "shopping-cart";
-  hasBadge?: boolean;
+  showBadge?: boolean;
 }
 
 const tabs: TabItem[] = [
   { id: "home", label: "Home", href: "/", icon: "home" },
   { id: "shop", label: "Shop", href: "/shop", icon: "store" },
   { id: "about", label: "About", href: "/about", icon: "info" },
-  { id: "cart", label: "Cart", href: "/cart", icon: "shopping-cart", hasBadge: true },
+  { id: "cart", label: "Cart", href: "/cart", icon: "shopping-cart", showBadge: true },
 ];
 
 function TabIcon({ name, className }: { name: TabItem["icon"]; className?: string }) {
-  const iconClass = `w-[22px] h-[22px] ${className || ""}`;
+  const iconClass = `w-6 h-6 ${className || ""}`;
 
   switch (name) {
     case "home":
@@ -58,6 +59,8 @@ function TabIcon({ name, className }: { name: TabItem["icon"]; className?: strin
 
 export function BottomTabBar() {
   const { pathname } = useLocation();
+  const cartItems = useCartStore((state) => state.items);
+  const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
@@ -65,17 +68,14 @@ export function BottomTabBar() {
   };
 
   return (
-    <nav
-      className="fixed bottom-0 left-0 right-0 z-50 h-[62px] border-t md:hidden"
-      style={{
-        backgroundColor: "#333238",
-        borderColor: "#353439"
-      }}
-    >
-      <div className="flex items-center justify-around h-full max-w-screen-sm mx-auto">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 h-[96px] glass-tab-bar md:hidden">
+      <div
+        className="flex items-center justify-around h-full max-w-screen-sm mx-auto"
+        style={{ padding: "10px 18px 14px" }}
+      >
         {tabs.map((tab) => {
           const active = isActive(tab.href);
-          const color = active ? "#D8B571" : "#929295";
+          const color = active ? "#D6A952" : "#8B8D92";
 
           return (
             <Link
@@ -86,18 +86,23 @@ export function BottomTabBar() {
             >
               <div className="relative">
                 <TabIcon name={tab.icon} />
-                {tab.hasBadge && (
+                {tab.showBadge && totalItems > 0 && (
                   <span
-                    className="absolute -top-1 -right-1 w-2 h-2 rounded-full"
-                    style={{ backgroundColor: "#D8B571" }}
-                  />
+                    className="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] rounded-full flex items-center justify-center text-[10px] font-bold"
+                    style={{
+                      backgroundColor: "#D6A952",
+                      color: "#1D1205",
+                    }}
+                  >
+                    {totalItems > 99 ? "99+" : totalItems}
+                  </span>
                 )}
               </div>
               <span
-                className="text-xs font-medium"
+                className="font-medium"
                 style={{
                   fontSize: "12px",
-                  lineHeight: "14px"
+                  lineHeight: "14px",
                 }}
               >
                 {tab.label}

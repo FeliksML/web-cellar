@@ -15,6 +15,13 @@ export { ProductSkeleton, ProductSkeletonGrid } from "./components/product-skele
 export { SearchInput } from "./components/search-input";
 export { DietaryFilterPills } from "./components/dietary-filter-pills";
 
+// Mobile components
+export { MobileProductCard } from "./components/mobile-product-card";
+export { MobileProductGrid } from "./components/mobile-product-grid";
+export { MobileFilterBar } from "./components/mobile-filter-bar";
+export { MobileShopView } from "./components/mobile-shop-view";
+export { MobileProductView } from "./components/mobile-product-view";
+
 // Bakery-specific components
 export { AllergenBadges, AllergenWarning } from "./components/allergen-badges";
 export {

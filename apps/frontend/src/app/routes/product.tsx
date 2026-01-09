@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { LandingNavbar } from "@/features/landing";
+import { LandingNavbar, BottomTabBar } from "@/features/landing";
 import {
   useProduct,
   DietaryBadgesFull,
@@ -12,8 +12,12 @@ import {
   SavingsBadge,
   QuantitySelector,
   useCartStore,
+  MobileProductView,
+  CartDrawer,
 } from "@/features/shop";
 import { useToastStore } from "@/stores/toast-store";
+import { useIsMobile } from "@/hooks/use-media-query";
+import { ToastContainer } from "@/components/ui/toast";
 
 export function ProductPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -66,10 +70,66 @@ export function ProductPage() {
   const isOnSale =
     product?.compare_at_price && product.compare_at_price > product.price;
 
-  // Gradient colors for effects
+  // Gradient colors for effects (used for box shadow)
   const glowFrom = product?.gradient_from || "#6366F1";
-  const glowTo = product?.gradient_to || "#8B5CF6";
 
+  // Check if mobile
+  const isMobile = useIsMobile();
+
+  // Mobile product handler
+  const handleMobileAddToCart = (prod: typeof product, qty: number) => {
+    if (!prod) return;
+
+    const cartProduct = {
+      id: prod.id,
+      name: prod.name,
+      slug: prod.slug,
+      price: prod.price,
+      compare_at_price: prod.compare_at_price,
+      short_description: prod.short_description,
+      gradient_from: prod.gradient_from,
+      gradient_to: prod.gradient_to,
+      is_featured: prod.is_featured,
+      is_bestseller: prod.is_bestseller,
+      protein_grams: prod.protein_grams,
+      is_gluten_free: prod.is_gluten_free,
+      is_dairy_free: prod.is_dairy_free,
+      is_vegan: prod.is_vegan,
+      is_keto_friendly: prod.is_keto_friendly,
+      is_active: prod.is_active,
+      is_on_sale: prod.is_on_sale,
+      is_in_stock: prod.is_in_stock,
+      primary_image_url: prod.primary_image_url,
+      category: prod.category,
+      lead_time_hours: prod.lead_time_hours,
+      minimum_quantity: prod.minimum_quantity,
+      quantity_increment: prod.quantity_increment,
+      allergens: prod.allergens,
+      average_rating: prod.average_rating,
+      review_count: prod.review_count,
+    };
+
+    addItem(cartProduct, qty);
+    addToast({ message: `Added ${qty} ${prod.name} to cart`, type: "success" });
+  };
+
+  // Mobile layout
+  if (isMobile) {
+    return (
+      <div className="min-h-screen shop-mobile-bg">
+        <LandingNavbar />
+        <MobileProductView
+          slug={slug || ""}
+          onAddToCart={handleMobileAddToCart}
+        />
+        <BottomTabBar />
+        <CartDrawer />
+        <ToastContainer />
+      </div>
+    );
+  }
+
+  // Desktop layout
   return (
     <div
       className="min-h-screen text-neutral-100 bg-cover bg-center bg-fixed bg-no-repeat"
@@ -174,15 +234,22 @@ export function ProductPage() {
                   ) : (
                     <div
                       className="w-full h-full flex items-center justify-center"
-                      style={{
-                        background: `linear-gradient(135deg, ${glowFrom}, ${glowTo})`,
-                      }}
+                      style={{ backgroundColor: "rgba(255,255,255,0.05)" }}
                     >
-                      <div className="w-40 h-48 rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
-                        <span className="text-white/60 text-lg font-medium uppercase tracking-wider">
-                          Treat
-                        </span>
-                      </div>
+                      <svg
+                        className="w-24 h-24 opacity-30"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        style={{ color: "#D5D6DA" }}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={1.5}
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
                     </div>
                   )}
 
