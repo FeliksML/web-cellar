@@ -107,6 +107,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #06080B; /* Darkest edge - ensures no gaps show through */
 }
 
 /* Grain texture utility - subtle noise for premium feel */
@@ -217,7 +218,7 @@ body {
 .landing-bg-gradient {
   background:
     radial-gradient(ellipse at 50% 30%, #25272D 0%, rgba(37,39,45,0) 55%),
-    linear-gradient(180deg, #070909 0%, #2C2B30 100%);
+    linear-gradient(180deg, #070909 0%, #0B0E12 100%);
 }
 
 /* Vignette overlay for landing */
@@ -266,13 +267,14 @@ body {
   background: rgba(40, 40, 40, 0.70);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
 }
 
 /* Mobile shop card */
 .shop-card {
   background: linear-gradient(180deg, #2B2D33 0%, #1F2126 100%);
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* Mobile shop CTA button */

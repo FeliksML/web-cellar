@@ -3,12 +3,18 @@ import { heroContent, featureBadges, featureSubtext } from "../data/landing.data
 
 export function HeroSection() {
   return (
-    <section className="relative pt-6 pb-8 overflow-hidden">
-      {/* Content container */}
-      <div className="relative z-10 mx-auto w-full max-w-md px-8">
+    <section className="relative min-h-screen overflow-hidden">
+      {/* Background image with products */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: 'url(/hero_strawberry_bluberry.png)' }}
+      />
+
+      {/* Text content - positioned in upper portion */}
+      <div className="relative z-10 flex flex-col items-center justify-start min-h-screen px-8 pt-24 sm:pt-28 md:pt-32 text-center">
 
         {/* 1. HERO TITLE */}
-        <h1 className="text-center font-display font-semibold text-shadow-hero" style={{ color: "#FDFDEF" }}>
+        <h1 className="font-display font-semibold text-shadow-hero" style={{ color: "#FDFDEF" }}>
           <span
             className="block"
             style={{
@@ -32,7 +38,7 @@ export function HeroSection() {
         </h1>
 
         {/* 2. FEATURE BADGES */}
-        <div className="mt-6 text-center">
+        <div className="mt-6">
           {/* Main badges row */}
           <div className="flex items-center justify-center gap-2 flex-wrap">
             {featureBadges.map((badge, index) => (
@@ -70,26 +76,8 @@ export function HeroSection() {
           </p>
         </div>
 
-        {/* 3. HERO IMAGE - Two muffins */}
-        <div className="relative mt-6 flex justify-center items-end h-[220px] sm:h-[260px] md:h-[300px]">
-          {/* Blueberry muffin - left */}
-          <img
-            src="/bluberry_pie.png"
-            alt="Blueberry protein muffin"
-            className="absolute left-0 bottom-0 w-[55%] max-w-[180px] sm:max-w-[200px] h-auto object-contain animate-float-gentle z-10"
-            style={{ animationDelay: "0s" }}
-          />
-          {/* Matcha/Pistachio muffin - right */}
-          <img
-            src="/final_strawberry_matcha.png"
-            alt="Pistachio matcha protein muffin"
-            className="absolute right-0 bottom-0 w-[55%] max-w-[180px] sm:max-w-[200px] h-auto object-contain animate-float-gentle"
-            style={{ animationDelay: "0.5s" }}
-          />
-        </div>
-
-        {/* 4. CTA BUTTON */}
-        <div className="mt-8 flex justify-center">
+        {/* 3. CTA BUTTON */}
+        <div className="mt-8">
           <Link
             to="/shop"
             className="btn-gold inline-flex items-center justify-center px-10 py-3 rounded-[10px] font-sans font-extrabold uppercase tracking-wider"
@@ -104,8 +92,8 @@ export function HeroSection() {
           </Link>
         </div>
 
-        {/* 5. SUPPORTING TEXT */}
-        <div className="mt-10 text-center">
+        {/* 4. SUPPORTING TEXT */}
+        <div className="mt-10">
           <p
             className="font-sans font-medium"
             style={{

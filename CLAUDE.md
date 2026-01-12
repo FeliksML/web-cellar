@@ -63,3 +63,10 @@ Development runs in Docker. The `docker-compose.dev.yml` mounts source directori
 - Database: PostgreSQL 16
 
 Frontend env vars must be prefixed with `VITE_` to be exposed to the browser.
+
+## Design Rules
+
+### Hero Section Background
+- **ALWAYS** use `/hero_strawberry_bluberry.png` as the hero background - this is the official product photo with dark background
+- **NEVER** use `background.png` or any plain brown/textured background - it has been deleted from the project
+- **NEVER** split hero into separate background + product images - use the single combined hero image

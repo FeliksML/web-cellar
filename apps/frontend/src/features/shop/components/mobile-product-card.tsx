@@ -76,9 +76,9 @@ export function MobileProductCard({ product, onAddToCart }: MobileProductCardPro
         )}
       </div>
 
-      {/* Title - Playfair Display 22px */}
+      {/* Title - Playfair Display 22px, 2 lines max */}
       <h3
-        className="font-display font-semibold text-center line-clamp-1 mt-3"
+        className="font-display font-semibold text-center line-clamp-2 mt-3"
         style={{
           fontSize: "22px",
           lineHeight: "1.05",

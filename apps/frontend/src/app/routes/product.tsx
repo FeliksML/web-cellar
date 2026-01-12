@@ -131,16 +131,7 @@ export function ProductPage() {
 
   // Desktop layout
   return (
-    <div
-      className="min-h-screen text-neutral-100 bg-cover bg-center bg-fixed bg-no-repeat"
-      style={{ backgroundImage: "url('/background.png')" }}
-    >
-      {/* Grain texture overlay */}
-      <div className="fixed inset-0 bg-grain pointer-events-none z-10" />
-
-      {/* Vignette overlay */}
-      <div className="fixed inset-0 vignette pointer-events-none z-10" />
-
+    <div className="min-h-screen text-neutral-100 shop-mobile-bg">
       {/* Navigation */}
       <LandingNavbar />
 

@@ -52,8 +52,8 @@ export function MobileProductGrid({
 
   return (
     <div
-      className="grid grid-cols-2 gap-4 mx-auto"
-      style={{ padding: "0 20px", maxWidth: "428px" }}
+      className="grid grid-cols-2 gap-4"
+      style={{ padding: "0 20px" }}
     >
       {products.map((product) => (
         <MobileProductCard
@@ -68,7 +68,7 @@ export function MobileProductGrid({
 
 function MobileProductGridSkeleton() {
   return (
-    <div className="grid grid-cols-2 gap-4 mx-auto" style={{ padding: "0 20px", maxWidth: "428px" }}>
+    <div className="grid grid-cols-2 gap-4" style={{ padding: "0 20px" }}>
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}

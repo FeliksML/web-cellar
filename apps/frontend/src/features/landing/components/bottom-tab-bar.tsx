@@ -70,7 +70,7 @@ export function BottomTabBar() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 h-[96px] glass-tab-bar md:hidden">
       <div
-        className="flex items-center justify-around h-full max-w-screen-sm mx-auto"
+        className="flex items-center justify-around h-full w-full"
         style={{ padding: "10px 18px 14px" }}
       >
         {tabs.map((tab) => {

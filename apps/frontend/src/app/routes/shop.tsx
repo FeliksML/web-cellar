@@ -71,92 +71,40 @@ export function ShopPage() {
 
   // Desktop view
   return (
-    <div
-      className="min-h-screen text-neutral-100 bg-cover bg-center bg-fixed bg-no-repeat"
-      style={{ backgroundImage: "url('/background.png')" }}
-    >
-      {/* Grain texture overlay */}
-      <div className="fixed inset-0 bg-grain pointer-events-none z-10" />
-
-      {/* Vignette overlay */}
-      <div className="fixed inset-0 vignette pointer-events-none z-10" />
-
-      {/* Ambient glow orbs */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        {/* Left purple glow */}
-        <div
-          className="absolute top-1/3 left-0 -translate-x-1/2 w-[500px] h-[500px] rounded-full blur-3xl opacity-30 mix-blend-screen"
-          style={{ backgroundColor: "#9B6BFF" }}
-        />
-        {/* Right gold glow */}
-        <div
-          className="absolute top-1/2 right-0 translate-x-1/2 w-[500px] h-[500px] rounded-full blur-3xl opacity-30 mix-blend-screen"
-          style={{ backgroundColor: "#E1CE71" }}
-        />
-      </div>
-
+    <div className="min-h-screen text-neutral-100 shop-mobile-bg">
       {/* Navigation */}
       <LandingNavbar />
 
       {/* Main content */}
-      <main className="relative z-20 pt-24 pb-16 px-4">
+      <main className="relative z-20 pt-8 pb-16 px-4">
         <div className="max-w-screen-xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            {/* Section title with decorative lines */}
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <div className="h-px w-12 bg-primary-400/50" />
-              <span className="text-sm uppercase tracking-widest text-primary-200 font-semibold">
-                Shop
-              </span>
-              <div className="h-px w-12 bg-primary-400/50" />
-            </div>
-            <h1 className="font-display text-4xl sm:text-5xl font-semibold tracking-tight text-primary-200 mb-4 drop-shadow">
-              Our Products
-            </h1>
-            <p className="text-neutral-200 max-w-2xl mx-auto text-base sm:text-lg">
-              Real food protein treats, made fresh with no preservatives.
-              Gluten-free, high-protein goodness you can actually feel good about.
-            </p>
+          {/* Minimal header - same style as mobile */}
+          <div className="text-center mb-8">
+            <span
+              className="font-medium uppercase"
+              style={{
+                fontSize: "14px",
+                letterSpacing: "0.32em",
+                color: "#73747A",
+              }}
+            >
+              SHOP
+            </span>
           </div>
 
-          {/* Category pills */}
-          <div className="mb-6">
+          {/* Filters row - horizontal on desktop */}
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <CategoryPills />
-          </div>
-
-          {/* Search and dietary filters */}
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6">
-            <SearchInput />
-            <DietaryFilterPills />
-          </div>
-
-          {/* Toolbar */}
-          <div className="flex items-center justify-between mb-8 py-3 px-4 bg-neutral-900/40 backdrop-blur-sm rounded-xl border border-neutral-800/50">
-            {/* Product count */}
-            <div className="text-sm text-neutral-300">
-              {data ? (
-                <>
-                  Showing{" "}
-                  <span className="text-primary-300 font-medium">
-                    {data.items.length}
-                  </span>{" "}
-                  of{" "}
-                  <span className="text-primary-300 font-medium">
-                    {data.total}
-                  </span>{" "}
-                  products
-                </>
-              ) : (
-                <span className="animate-pulse">Loading...</span>
-              )}
-            </div>
-
-            {/* Sort and Cart */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              <SearchInput />
               <ProductSort />
               <CartButton />
             </div>
+          </div>
+
+          {/* Dietary filters */}
+          <div className="mb-8">
+            <DietaryFilterPills />
           </div>
 
           {/* Product grid */}

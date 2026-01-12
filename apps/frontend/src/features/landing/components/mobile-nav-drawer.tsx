@@ -17,12 +17,12 @@ export function MobileNavDrawer({ isOpen, onClose }: MobileNavDrawerProps) {
     <>
       {/* Backdrop overlay - very high z-index */}
       <div
-        className="fixed inset-0 bg-black/60 z-[9998] md:hidden"
+        className="fixed inset-0 bg-black/60 z-[9998]"
         onClick={onClose}
       />
 
       {/* Slide-in drawer */}
-      <div className="fixed top-0 right-0 h-full w-64 bg-neutral-900 z-[9999] md:hidden shadow-xl">
+      <div className="fixed top-0 left-0 h-full w-64 bg-neutral-900 z-[9999] shadow-xl">
         <div className="flex flex-col p-6 pt-24">
           {navLinks.map((link) => (
             <Link

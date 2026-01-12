@@ -1,0 +1,265 @@
+/* Admin Promo Codes Page Styles */
+
+.admin-promo {
+    max-width: 1400px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.create-btn {
+    padding: 12px 24px;
+    background: #fbbf24;
+    border: none;
+    border-radius: 10px;
+    color: #1a1a22;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.create-btn:hover {
+    background: #f59e0b;
+    transform: translateY(-1px);
+}
+
+/* Promo Table */
+.promo-table-wrapper {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.promo-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.promo-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.promo-table td {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: top;
+}
+
+.promo-table tr.inactive {
+    opacity: 0.5;
+}
+
+.code-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.code {
+    font-family: monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fbbf24;
+}
+
+.description {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.discount-cell {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #22c55e;
+}
+
+.conditions-cell,
+.validity-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.85rem;
+}
+
+.conditions-cell .none,
+.validity-cell .none {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.usage-cell {
+    font-family: monospace;
+}
+
+.status-toggle {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.status-toggle.active {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.status-toggle.active:hover {
+    background: rgba(34, 197, 94, 0.25);
+}
+
+.status-toggle.inactive {
+    background: rgba(100, 100, 100, 0.15);
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.status-toggle.inactive:hover {
+    background: rgba(100, 100, 100, 0.25);
+}
+
+.actions-cell {
+    display: flex;
+    gap: 8px;
+}
+
+.edit-btn {
+    padding: 6px 12px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 6px;
+    color: #3b82f6;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+.delete-btn {
+    padding: 6px 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 6px;
+    color: #ef4444;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.delete-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.empty-row {
+    text-align: center;
+    padding: 40px !important;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Modal */
+.promo-modal {
+    max-width: 600px;
+    width: 90%;
+}
+
+.promo-modal h3 {
+    margin: 0 0 20px 0;
+    font-size: 1.2rem;
+    color: #fff;
+}
+
+.promo-modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+.promo-modal .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.promo-modal .form-group label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.promo-modal .form-group input,
+.promo-modal .form-group select {
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+.promo-modal .form-group input:focus,
+.promo-modal .form-group select:focus {
+    outline: none;
+    border-color: #fbbf24;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .promo-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .promo-table {
+        min-width: 900px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+    }
+
+    .create-btn {
+        width: 100%;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: span 1;
+    }
+}

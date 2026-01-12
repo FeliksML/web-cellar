@@ -19,6 +19,7 @@ export { DietaryFilterPills } from "./components/dietary-filter-pills";
 export { MobileProductCard } from "./components/mobile-product-card";
 export { MobileProductGrid } from "./components/mobile-product-grid";
 export { MobileFilterBar } from "./components/mobile-filter-bar";
+export { MobileFilterDrawer } from "./components/mobile-filter-drawer";
 export { MobileShopView } from "./components/mobile-shop-view";
 export { MobileProductView } from "./components/mobile-product-view";
 

@@ -2,6 +2,10 @@ export interface User {
   id: number;
   email: string;
   is_active: boolean;
+  role: "customer" | "admin" | "super_admin";
+  first_name?: string | null;
+  last_name?: string | null;
+  phone?: string | null;
   created_at: string;
 }
 

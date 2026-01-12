@@ -1,0 +1,312 @@
+/* Admin Inventory Page Styles */
+
+.admin-inventory {
+    max-width: 1400px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.bulk-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.bulk-count {
+    color: #fbbf24;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.bulk-cancel-btn {
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.bulk-save-btn {
+    padding: 10px 24px;
+    background: #22c55e;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.bulk-save-btn:hover:not(:disabled) {
+    background: #16a34a;
+}
+
+.bulk-save-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Stock Summary */
+.stock-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.summary-card {
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.summary-card.out-of-stock {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(239, 68, 68, 0.05));
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.summary-card.low-stock {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(251, 191, 36, 0.05));
+    border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.summary-card.total {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.summary-count {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+}
+
+.summary-label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Inventory Table */
+.inventory-table-wrapper {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.inventory-table th {
+    padding: 14px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.inventory-table td {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.inventory-table tr.critical {
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.inventory-table tr.warning {
+    background: rgba(251, 191, 36, 0.03);
+}
+
+.product-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.product-thumb {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.product-name {
+    font-weight: 500;
+    color: #fff;
+}
+
+.sku {
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.stock-qty {
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.stock-qty.critical {
+    color: #ef4444;
+}
+
+.stock-qty.warning {
+    color: #fbbf24;
+}
+
+.threshold {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.out {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+}
+
+.status-badge.low {
+    background: rgba(251, 191, 36, 0.2);
+    color: #fbbf24;
+}
+
+.update-cell {
+    width: 200px;
+}
+
+.update-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.bulk-input {
+    width: 80px;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.bulk-input:focus {
+    outline: none;
+    border-color: #fbbf24;
+}
+
+.quick-edit-btn {
+    padding: 6px 12px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    border-radius: 6px;
+    color: #3b82f6;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quick-edit-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+}
+
+.edit-inline {
+    display: flex;
+    gap: 6px;
+}
+
+.stock-input {
+    width: 70px;
+    padding: 6px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #fbbf24;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.stock-input:focus {
+    outline: none;
+}
+
+.save-btn {
+    padding: 6px 12px;
+    background: #22c55e;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    padding: 6px 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.empty-row {
+    text-align: center;
+    padding: 40px !important;
+}
+
+.empty-row.success {
+    color: #22c55e;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .inventory-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .inventory-table {
+        min-width: 700px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+    }
+
+    .bulk-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .stock-summary {
+        grid-template-columns: 1fr;
+    }
+}
